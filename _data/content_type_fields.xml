@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<content_type_fields>
+  <field content_type="ticket_message" field_name="alert_handler_class">Kieran\Support\Alert\Ticket</field>
+  <field content_type="ticket_message" field_name="attachment_handler_class">Kieran\Support\Attachment\Ticket</field>
+  <field content_type="ticket_message" field_name="entity">Kieran\Support:TicketComment</field>
+</content_type_fields>

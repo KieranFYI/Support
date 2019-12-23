@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="admin_navigation.support" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Support]]></phrase>
+  <phrase title="admin_navigation.supportFields" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Fields]]></phrase>
+  <phrase title="admin_navigation.supportStatus" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Ticket Statuses]]></phrase>
+  <phrase title="admin_navigation.supportTypes" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Ticket Types]]></phrase>
+  <phrase title="alert_opt_out.ticket_message_updated" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Updated my support ticket]]></phrase>
+  <phrase title="alert_opt_out.ticket_message_watched" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Updated a watched support ticket]]></phrase>
+  <phrase title="assigned_to" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[Assigned to]]></phrase>
+  <phrase title="cron_entry.kieran_support_awaiting" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[[Kieran] Support: Closes awaiting tickets]]></phrase>
+  <phrase title="cron_entry.kieran_support_notify" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[[Kieran] Support: Sends emails notifications for awaiting tickets]]></phrase>
+  <phrase title="display" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Display]]></phrase>
+  <phrase title="fields" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Fields]]></phrase>
+  <phrase title="kieran_support" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Support]]></phrase>
+  <phrase title="kieran_support_assign_ticket" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Assign ticket]]></phrase>
+  <phrase title="kieran_support_comment_delete" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Delete comment]]></phrase>
+  <phrase title="kieran_support_comment_hidden" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[This comment has been hidden]]></phrase>
+  <phrase title="kieran_support_delete_comment" version_id="1000010" version_string="1.0.0 Alpha" global_cache="1"><![CDATA[Delete]]></phrase>
+  <phrase title="kieran_support_delete_ticket" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Delete ticket]]></phrase>
+  <phrase title="kieran_support_lock_comments" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Lock comments]]></phrase>
+  <phrase title="kieran_support_resolve_ticket" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Resolve ticket]]></phrase>
+  <phrase title="kieran_support_restore_comment" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Restore]]></phrase>
+  <phrase title="kieran_support_restore_ticket" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Restore ticket]]></phrase>
+  <phrase title="kieran_support_ticket_change_status" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Change status]]></phrase>
+  <phrase title="kieran_support_ticket_create" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Create ticket]]></phrase>
+  <phrase title="kieran_support_ticket_create_appeal" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Ban Appeal]]></phrase>
+  <phrase title="kieran_support_ticket_create_application" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Application]]></phrase>
+  <phrase title="kieran_support_ticket_create_ticket" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Ticket]]></phrase>
+  <phrase title="kieran_support_ticket_fields" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Fields]]></phrase>
+  <phrase title="kieran_support_ticket_name" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Name]]></phrase>
+  <phrase title="kieran_support_ticket_permission_create" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Create]]></phrase>
+  <phrase title="kieran_support_ticket_permission_delete_hard" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Hard delete]]></phrase>
+  <phrase title="kieran_support_ticket_permission_delete_soft" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Soft delete]]></phrase>
+  <phrase title="kieran_support_ticket_permission_process" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Process permission]]></phrase>
+  <phrase title="kieran_support_ticket_permission_view" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[View permission]]></phrase>
+  <phrase title="kieran_support_ticket_status_assigned_message" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Your ticket is being processed.]]></phrase>
+  <phrase title="kieran_support_ticket_status_awaiting_message" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Your ticket requires your response before we can proceed, if we do not hear from you then the ticket will automatically expire.]]></phrase>
+  <phrase title="kieran_support_ticket_status_id" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Status ID]]></phrase>
+  <phrase title="kieran_support_ticket_status_open_message" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Your ticket is in a queue and will be assigned to a processor soon.]]></phrase>
+  <phrase title="kieran_support_ticket_status_resolved_message" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Your ticket has been resolved, but if you have any further questions or concerns you can create a new ticket.]]></phrase>
+  <phrase title="kieran_support_ticket_status_visible" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Visible]]></phrase>
+  <phrase title="kieran_support_ticket_statuses" version_id="1000000" version_string="1.0.0 Beta"><![CDATA[Ticket Statuses]]></phrase>
+  <phrase title="kieran_support_ticket_statuses_add" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Add status]]></phrase>
+  <phrase title="kieran_support_ticket_statuses_edit" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Edit status]]></phrase>
+  <phrase title="kieran_support_ticket_type" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Ticket Type]]></phrase>
+  <phrase title="kieran_support_ticket_types" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Ticket Types]]></phrase>
+  <phrase title="kieran_support_ticket_types_add" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Add type]]></phrase>
+  <phrase title="kieran_support_ticket_types_edit" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Edit type]]></phrase>
+  <phrase title="kieran_support_ticket_updated" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Your ticket has been updated]]></phrase>
+  <phrase title="kieran_support_ticket_watched_updated" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[A ticket you watch has been updated]]></phrase>
+  <phrase title="kieran_support_tickets" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Tickets]]></phrase>
+  <phrase title="kieran_support_tickets_awaiting_subject" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[You have tickets awaiting responses]]></phrase>
+  <phrase title="kieran_support_tickets_manage" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Manage]]></phrase>
+  <phrase title="kieran_support_tickets_no_types" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[No ticket types available]]></phrase>
+  <phrase title="kieran_support_title" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Help &amp; Support]]></phrase>
+  <phrase title="kieran_support_unlock_comments" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Unlock comments]]></phrase>
+  <phrase title="kieran_support_view_articles" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[View articles]]></phrase>
+  <phrase title="kieran_support_view_ticket" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[View ticket]]></phrase>
+  <phrase title="kieran_support_view_tickets" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[View tickets]]></phrase>
+  <phrase title="kieran_support_viewing" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Viewing Support]]></phrase>
+  <phrase title="kieran_support_what_can_we_help_you_with" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[What can we help you with?]]></phrase>
+  <phrase title="nav.support" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Support]]></phrase>
+  <phrase title="nav.supportMyTickets" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[My Tickets]]></phrase>
+  <phrase title="permission.support_articles_can_manage" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[Can manage articles]]></phrase>
+  <phrase title="permission_interface.supportTicket" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Support permissions]]></phrase>
+  <phrase title="please_enter_reason_for_ticketing_this_message" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[Please enter a Title/Message for this ticket]]></phrase>
+  <phrase title="status_cannot_be_deleted_associated_with_ticket_explain" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[This status cannot be deleted as it is associated with a ticket. If you do not wish to use this, please disable it instead.]]></phrase>
+  <phrase title="this_is_first_comment_in_ticket" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[This is the first comment in the ticket. Deleting it will delete the whole ticket.]]></phrase>
+  <phrase title="ticket_message" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[Tickets]]></phrase>
+  <phrase title="type_cannot_be_deleted_associated_with_ticket_explain" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[This type cannot be deleted as it is associated with a ticket. If you do not wish to use this, please disable it instead.]]></phrase>
+  <phrase title="view_this_ticket" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[View this ticket]]></phrase>
+</phrases>

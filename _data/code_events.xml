@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<code_events>
+  <event event_id="ticket_update_status"><![CDATA[Called when the ticket status is updated]]></event>
+</code_events>

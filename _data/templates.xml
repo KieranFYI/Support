@@ -1,0 +1,1670 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+  <template type="admin" title="kieran_support" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('admin_navigation.support') }}</xf:title>
+
+<xf:macro template="section_nav_macros" name="section_nav" arg-section="support" />]]></template>
+  <template type="admin" title="kieran_support_statuses" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('kieran_support_ticket_statuses') }}</xf:title>
+
+<xf:pageaction>
+	<xf:button href="{{ link('support/statuses/add') }}" icon="add">{{ phrase('kieran_support_ticket_statuses_add') }}</xf:button>
+</xf:pageaction>
+
+<xf:form action="{{ link('support/statuses/toggle') }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:datalist>
+				<xf:foreach loop="$statuses" value="$status">
+					<xf:datarow rowtype="subsection">
+						<xf:cell href="{{ link('support/statuses/edit', $status) }}">{$status.name}</xf:cell>
+						<xf:if is="!$status.undeletable">
+							<xf:toggle name="enabled[{$status.status_id}]" selected="$status.enabled"
+								class="dataList-cell--separated" submit="true"
+								tooltip="{{ phrase('enable_disable_x', {'title': $status.name}) }}" />
+							<xf:delete href="{{link('support/statuses/delete', $status)}}" />
+						</xf:if>
+					</xf:datarow>
+				</xf:foreach>
+			</xf:datalist>
+		</div>
+	</div>
+</xf:form>]]></template>
+  <template type="admin" title="kieran_support_statuses_edit" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:if is="$status.isInsert()">
+	<xf:title>{{ phrase('kieran_support_ticket_statuses_add') }}</xf:title>
+<xf:else />
+	<xf:title>{{ phrase('kieran_support_ticket_statuses_edit:') }} {$status.name}</xf:title>
+	
+	<xf:pageaction>
+		<xf:button href="{{ link('support/statuses/delete', $status) }}" icon="delete">{{ phrase('delete') }}</xf:button>
+	</xf:pageaction>
+
+</xf:if>
+
+<xf:if is="$success">
+	<div class="blockMessage blockMessage--success blockMessage--iconic">{{ phrase('redirect_changes_saved_successfully') }}</div>
+</xf:if>
+
+<div class="block">
+	<xf:form action="{{ link('support/statuses/save', $status) }}" ajax="true" class="block-container" novalidate="novalidate">
+		<div class="block-body">
+
+			<xf:if is="!$status.undeletable">
+				<xf:checkboxrow label="{{ phrase('enabled') }}">
+					<xf:option name="status[enabled]" selected="$status.enabled" value="1" />
+				</xf:checkboxrow>
+			</xf:if>
+			
+			<xf:textboxrow name="status[status_id]" value="{$status.status_id}"
+				maxlength="{{ max_length($status, 'name') }}"
+				label="{{ phrase('kieran_support_ticket_status_id') }}"
+				disabled="{{ !$status.isInsert() }}"  />
+	
+			<xf:textboxrow name="status[name]" value="{$status.name}"
+				maxlength="{{ max_length($status, 'name') }}"
+				label="{{ phrase('kieran_support_ticket_name') }}"/>
+			
+			<xf:selectrow label="{{ phrase('state') }}" name="status[state]">
+				<xf:foreach loop="$states" value="$state">
+					<xf:option value="{$state}" selected="{{ $status.state == $state }}">{{ $state|to_upper('ucfirst') }}</xf:option>
+				</xf:foreach>
+			</xf:selectrow>
+
+			<xf:textarearow name="status[message]" value="{$status.message}" autosize="true"
+				label="{{ phrase('message') }}" />
+		</div>
+
+		<xf:if is="!$status.undeletable">
+			<h3 class="block-formSectionHeader">
+				<span class="collapseTrigger collapseTrigger--block" data-xf-click="toggle" data-target="< :up:next">
+					<span class="block-formSectionHeader-aligner">{{ phrase('other') }}</span>
+				</span>
+			</h3>
+			<div class="block-body block-body--collapsible">
+				<xf:selectrow label="{{ phrase('fields') }}" name="fields[]" multiple="multiple">
+					<xf:option value=""></xf:option>
+					<xf:foreach loop="$fields" value="$field">
+						<xf:option value="{$field.field_id}" selected="{{ $status.isFieldSelected($field.field_id)}}">{{ $field.field_id }} - {{ $field.getTitle() }}</xf:option>
+					</xf:foreach>
+				</xf:selectrow>
+			</div>
+		</xf:if>
+	
+		<xf:submitrow icon="save" sticky="true" />
+	</xf:form>
+</div>]]></template>
+  <template type="admin" title="kieran_support_types" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('kieran_support_ticket_types') }}</xf:title>
+
+<xf:pageaction>
+	<xf:button href="{{ link('support/types/add') }}" icon="add">{{ phrase('kieran_support_ticket_types_add') }}</xf:button>
+</xf:pageaction>
+
+<xf:form action="{{ link('support/types/toggle') }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:datalist>
+				<xf:foreach loop="$types" value="$type">
+					<xf:datarow rowtype="subsection">
+						<xf:cell href="{{ link('support/types/edit', $type) }}">{$type.name}</xf:cell>
+						<xf:toggle name="enabled[{$type.type_id}]" selected="$type.enabled"
+							class="dataList-cell--separated" submit="true"
+							tooltip="{{ phrase('enable_disable_x', {'title': $type.name}) }}" />
+						<xf:delete href="{{link('support/types/delete', $type)}}" />
+					</xf:datarow>
+				</xf:foreach>
+			</xf:datalist>
+		</div>
+	</div>
+</xf:form>]]></template>
+  <template type="admin" title="kieran_support_types_edit" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:if is="$type.isInsert()">
+	<xf:title>{{ phrase('kieran_support_ticket_types_add') }}</xf:title>
+<xf:else />
+	<xf:title>{{ phrase('kieran_support_ticket_types_edit:') }} {$type.name}</xf:title>
+	
+	<xf:pageaction>
+		<xf:button href="{{ link('support/types/delete', $type) }}" icon="delete">{{ phrase('delete') }}</xf:button>
+	</xf:pageaction>
+
+</xf:if>
+
+<xf:if is="$success">
+	<div class="blockMessage blockMessage--success blockMessage--iconic">{{ phrase('redirect_changes_saved_successfully') }}</div>
+</xf:if>
+
+<div class="block">
+	<xf:form action="{{ link('support/types/save', $type) }}" ajax="true" class="block-container" novalidate="novalidate">
+		<div class="block-body">
+
+			<xf:checkboxrow label="{{ phrase('enabled') }}">
+				<xf:option name="type[enabled]" selected="$type.enabled" value="1" />
+			</xf:checkboxrow>
+
+			<xf:textboxrow name="type[name]" value="{$type.name}"
+				maxlength="{{ max_length($type, 'name') }}"
+				label="{{ phrase('kieran_support_ticket_name') }}" />
+
+			<xf:textarearow name="type[description]" value="{$type.description}" autosize="true"
+				label="{{ phrase('description') }}" />
+		</div>
+
+		<xf:if is="!$type.isInsert()">
+			<h3 class="block-formSectionHeader">
+				<span class="collapseTrigger collapseTrigger--block" data-xf-click="toggle" data-target="< :up:next">
+					<span class="block-formSectionHeader-aligner">{{ phrase('permissions') }}</span>
+				</span>
+			</h3>
+			<div class="block-body block-body--collapsible">
+
+				<xf:textboxrow name="permission[create]" value="{$type.permission_create}"
+					maxlength="{{ max_length($type, 'permission_create') }}"
+					label="{{ phrase('kieran_support_ticket_permission_create') }}" />
+
+				<xf:textboxrow name="permission[view]" value="{$type.permission_view}"
+					maxlength="{{ max_length($type, 'permission_view') }}"
+					label="{{ phrase('kieran_support_ticket_permission_view') }}" />
+
+				<xf:textboxrow name="permission[process]" value="{$type.permission_process}"
+					maxlength="{{ max_length($type, 'permission_process') }}"
+					label="{{ phrase('kieran_support_ticket_permission_process') }}" />
+
+				<xf:textboxrow name="permission[delete_soft]" value="{$type.permission_soft_delete}"
+					maxlength="{{ max_length($type, 'permission_soft_delete') }}"
+					label="{{ phrase('kieran_support_ticket_permission_delete_soft') }}" />
+
+				<xf:textboxrow name="permission[delete_hard]" value="{$type.permission_hard_delete}"
+					maxlength="{{ max_length($type, 'permission_hard_delete') }}"
+					label="{{ phrase('kieran_support_ticket_permission_delete_hard') }}" />
+			</div>
+		</xf:if>
+
+		<h3 class="block-formSectionHeader">
+			<span class="collapseTrigger collapseTrigger--block" data-xf-click="toggle" data-target="< :up:next">
+				<span class="block-formSectionHeader-aligner">{{ phrase('other') }}</span>
+			</span>
+		</h3>
+		<div class="block-body block-body--collapsible">
+			<xf:selectrow label="{{ phrase('fields') }}" name="fields[]" multiple="multiple">
+				<xf:option value=""></xf:option>
+				<xf:foreach loop="$fields" value="$field">
+					<xf:option value="{$field.field_id}" selected="{{ $type.isFieldSelected($field.field_id)}}">{{ $field.field_id }} - {{ $field.getTitle() }}</xf:option>
+				</xf:foreach>
+			</xf:selectrow>
+
+			<xf:selectrow label="{{ phrase('status') }}" name="status[]" multiple="multiple" value="">
+				<xf:option value=""></xf:option>
+				<xf:foreach loop="$allStatus" value="$status">
+					<xf:option value="{$status.status_id}" selected="{{ $type.isStatusSelected($status.status_id)}}">{{ $status.field_id }} - {{ $status.getTitle() }}</xf:option>
+				</xf:foreach>
+			</xf:selectrow>
+		</div>
+
+		<xf:submitrow icon="save" sticky="true" />
+	</xf:form>
+</div>]]></template>
+  <template type="admin" title="ticket_field_edit" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:include template="base_custom_field_edit">
+	<xf:set var="$extraOptions">
+		<xf:macro template="base_custom_field_macros" name="common_options"
+			arg-field="{$field}" />
+	</xf:set>
+</xf:include>]]></template>
+  <template type="admin" title="ticket_field_list" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:pageaction>
+	<xf:button href="{{ link($prefix . '/add') }}" icon="add">{{ phrase('add_field') }}</xf:button>
+</xf:pageaction>
+
+<xf:if is="$fieldsGrouped is not empty">
+	<xf:form action="{{ link($prefix . '/toggle') }}" class="block" ajax="true">
+		<div class="block-outer">
+			<xf:macro template="filter_macros" name="quick_filter" arg-key="user-fields" arg-class="block-outer-opposite" />
+		</div>
+		<div class="block-container">
+			<div class="block-body">
+				<xf:datalist>
+					<xf:foreach loop="$displayGroups" key="$displayGroupId" value="$displayGroup">
+						<xf:if is="{$fieldsGrouped.{$displayGroupId}} is not empty">
+							<tbody class="dataList-rowGroup">
+								<xf:datarow rowtype="subsection" rowclass="dataList-row--noHover">
+									<xf:cell colspan="2">{$displayGroup}</xf:cell>
+								</xf:datarow>
+								<xf:foreach loop="{$fieldsGrouped.{$displayGroupId}}" value="$field">
+									<xf:datarow
+										label="{$field.title|htmlspecialchars}"
+										href="{{ link($prefix . '/edit', $field) }}"
+										delete="{{ link($prefix . '/delete', $field) }}"
+										hash="{$field.field_id}">
+										<xf:hint>
+											{$fieldTypes.{$field.field_type}.label}
+										</xf:hint>
+									</xf:datarow>
+								</xf:foreach>
+							</tbody>
+						</xf:if>
+					</xf:foreach>
+				</xf:datalist>
+			</div>
+			<div class="block-footer">
+				<span class="block-footer-counter">{{ display_totals($displayGroups) }}</span>
+			</div>
+		</div>
+	</xf:form>
+<xf:else />
+	<div class="blockMessage">{{ phrase('no_items_have_been_created_yet') }}</div>
+</xf:if>]]></template>
+  <template type="email" title="kieran_support_awaiting" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<mail:subject>
+{{ phrase('kieran_support_tickets_awaiting_subject') }}
+</mail:subject>
+
+<h2>{{ phrase('kieran_support_tickets_awaiting_subject') }}</h2>
+
+<div class="message">
+	<table cellpadding="10" cellspacing="0" border="0" width="100%">
+		<xf:foreach loop="$tickets" value="$ticket">
+			<tr>
+				<td width="75%">
+					<a href="{{ link('canonical:support/tickets', $ticket) }}">
+						{$ticket.TicketType.name}: {$ticket.ticket_title}
+					</a>
+				</td>
+				<td align="right">
+					<a href="{{ link('canonical:support/tickets', $ticket) }}" class="button">{{ phrase('view_this_ticket') }}</a>
+				</td>
+			</tr>
+		</xf:foreach>
+	</table>
+</div>]]></template>
+  <template type="public" title="alert_ticket_message_updated" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[{{ phrase('kieran_support_ticket_updated') }}
+<a href="{{ link('support/tickets', $content) }}">{{ phrase('kieran_support_view_ticket') }}</a>]]></template>
+  <template type="public" title="alert_ticket_message_watched" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[{{ phrase('kieran_support_ticket_watched_updated') }}
+<a href="{{ link('support/tickets', $content) }}">{{ phrase('kieran_support_view_ticket') }}</a>]]></template>
+  <template type="public" title="kieran_support" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('kieran_support_title') }}</xf:title>
+<xf:description>We're here to help.</xf:description>
+
+<xf:wrap template="kieran_support_wrapper">
+	<xf:set var="$pageSelected" value="index" />
+</xf:wrap>
+
+
+<xf:if is="$faq is not empty">
+	<div class="block">
+		<div class="block-container">
+			<h2 class="block-header">
+				Frequently asked questions
+			</h2>
+			<div class="block-body">
+				<xf:datalist>
+					<xf:foreach loop="$faq" value="$article">
+						<xf:datarow rowclass="dataList-row">
+							<xf:cell class="dataList-cell--min dataList-cell--alt"
+									 href="/support/{$article.Topic.slug}/{$article.slug}/">
+								<i class="fa {$topic.icon} fa-fw fa-2x" aria-hidden="true"></i>
+							</xf:cell>
+							<xf:main label="{$article.title}"
+									 href="/support/{$article.Topic.slug}/{$article.slug}/" />
+						</xf:datarow>
+					</xf:foreach>
+				</xf:datalist>
+			</div>
+		</div>
+	</div>
+</xf:if>
+
+<div class="block">
+	<div class="block-container">
+		<h2 class="block-header">
+			{{ phrase('kieran_support_what_can_we_help_you_with') }}
+		</h2>
+		<div class="block-body">
+			<xf:datalist>
+				<xf:if is="$topics is not empty">
+					<xf:foreach loop="$topics" value="$topic">
+						<xf:datarow rowclass="dataList-row">
+							<xf:cell class="dataList-cell--min dataList-cell--alt"
+									 href="/support/{$topic.slug}/">
+								<i class="fa {$topic.icon} fa-fw fa-2x" aria-hidden="true"></i>
+							</xf:cell>
+							<xf:main label="{$topic.title}"
+									 href="/support/{$topic.slug}/"
+									 explain="{$topic.description}" />
+						</xf:datarow>
+					</xf:foreach>
+					<xf:else />
+					<xf:datarow rowclass="dataList-row--noHover">
+						<xf:cell class="dataList-cell--min dataList-cell--alt">
+							<i class="fa fa-info-circle" aria-hidden="true"></i>
+						</xf:cell>
+						<xf:main label="Sorry, there are no topics right now." />
+					</xf:datarow>
+				</xf:if>
+			</xf:datalist>
+		</div>
+	</div>
+</div>]]></template>
+  <template type="public" title="kieran_support_article_edit" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:if is="$article.isInsert()">
+	<xf:title>Create Article</xf:title>
+	<xf:else />
+	<xf:title>Edit Topic: {$article.title}</xf:title>
+
+	<xf:pageaction>
+		<xf:button href="{{ link('support/manage/article/delete', $article) }}" icon="delete">{{ phrase('delete') }}</xf:button>
+	</xf:pageaction>
+
+</xf:if>
+
+<div class="block">
+	<xf:form action="{{ link('support/manage/article/save', $article) }}" ajax="true" class="block-container" novalidate="novalidate">
+		<div class="block-body">
+
+			<xf:textboxrow value="{$article.Topic.title}" disabled="true"
+						   label="{{ phrase('Topic') }}" />
+			<xf:hiddenval name="topic_id">{$article.Topic.topic_id}</xf:hiddenval>
+
+			<xf:textboxrow name="title" value="{$article.title}"
+						   label="{{ phrase('title') }}" />
+
+			<xf:textarearow name="description" value="{$article.description}" autosize="true"
+							label="{{ phrase('description') }}" />
+
+			<xf:numberboxrow name="display_order" value="{$article.display_order}" min="1"
+							 label="{{ phrase('display_order') }}" />
+
+			<xf:numberboxrow name="view_power_required" value="{$article.view_power_required}" min="1"
+							 label="{{ phrase('view_power_required') }}" />
+			
+			<xf:checkboxrow label="{{ phrase('FAQ') }}">
+				<xf:option name="is_faq" selected="$article.is_faq" value="1" />
+			</xf:checkboxrow>
+			
+			<xf:formrow rowtype="input"
+				label="{{ phrase('execute_callback') }}">
+				<xf:macro name="callback_fields" arg-data="{$article}" />
+			</xf:formrow>
+			
+			<xf:selectrow label="{{ phrase('type') }}" name="type">
+				<xf:option value="bbcode">BBCode</xf:option>
+				<xf:option value="link">Link</xf:option>
+			</xf:selectrow>
+			
+			<xf:editor name="message" value="{$article.message}"
+					   placeholder="Article content"
+					   data-min-height="400" />
+		</div>
+
+		<xf:submitrow icon="save" sticky="true" />
+	</xf:form>
+</div>
+
+<xf:macro name="callback_fields"
+	arg-data=""
+	arg-namePrefix=""
+	arg-className="callback_class"
+	arg-methodName="callback_method"
+	arg-classValue=""
+	arg-methodValue=""
+	arg-size="25"
+	arg-readOnly="{{ false }}">
+
+	<xf:if is="$namePrefix">
+		<xf:set var="$className" value="{$namePrefix}_class" />
+		<xf:set var="$methodName" value="{$namePrefix}_method" />
+	</xf:if>
+	<xf:if is="empty($classValue) && !empty($data)">
+		<xf:set var="$classValue" value="{$data.{$className}}" />
+	</xf:if>
+	<xf:if is="empty($methodValue) && !empty($data)">
+		<xf:set var="$methodValue" value="{$data.{$methodName}}" />
+	</xf:if>
+
+	<div class="inputGroup" dir="ltr">
+		<xf:textbox name="{$className}" value="{$classValue}" size="{$size}" maxlength="100" dir="ltr"
+			readonly="{$readOnly}"
+			placeholder="{{ phrase('class') }}" />
+		<span class="inputGroup-text">::</span>
+		<xf:textbox name="{$methodName}" value="{$methodValue}" size="{$size}" maxlength="75" dir="ltr"
+			readonly="{$readOnly}"
+			placeholder="{{ phrase('method') }}" />
+	</div>
+	<p class="formRow-explain">{{ phrase('callback_class_method_explain') }}</p>
+</xf:macro>
+
+<xf:macro name="callback_row"
+	arg-label="!"
+	arg-explain=""
+	arg-data=""
+	arg-namePrefix=""
+	arg-className="callback_class"
+	arg-methodName="callback_method"
+	arg-classValue=""
+	arg-methodValue=""
+	arg-size="25"
+	arg-readOnly="{{ false }}">
+	<xf:formrow label="{$label}" explain="{$explain|raw}" rowtype="input">
+		<xf:macro name="callback_fields"
+			arg-data="{$data}"
+			arg-namePrefix="{$namePrefix}"
+			arg-className="{$className}"
+			arg-methodName="{$methodName}"
+			arg-classValue="{$classValue}"
+			arg-methodValue="{$methodValue}"
+			arg-size="{$size}"
+			arg-readOnly="{$readOnly}" />
+	</xf:formrow>
+</xf:macro>]]></template>
+  <template type="public" title="kieran_support_article_view" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{$article.title}</xf:title>
+<xf:description>{$article.description}</xf:description>
+
+<xf:css src="kieran_support_article_view.less" />
+
+<xf:wrap template="kieran_support_wrapper">
+	<xf:set var="$pageSelected" value="{$article.Topic.slug}" />
+</xf:wrap>
+
+<xf:breadcrumb href="/support/{$article.Topic.slug}/">{$article.Topic.title}</xf:breadcrumb>
+
+<xf:if is="$article.type == 'bbcode'">
+	<div class="block article">
+		<div class="block-container">
+			<div class="block-body">
+				{{ $content|raw }}
+			</div>
+		</div>
+	</div>
+</xf:if>]]></template>
+  <template type="public" title="kieran_support_article_view.less" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[.article {
+	.block-body {
+		padding: 10px;
+	}
+}]]></template>
+  <template type="public" title="kieran_support_articles_manage" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:title>Manage Articles</xf:title>
+
+<xf:wrap template="kieran_support_wrapper">
+	<xf:set var="$pageSelected" value="manage" />
+</xf:wrap>
+
+<div class="block">
+	<div class="block-container">
+		<h2 class="block-header">
+			Topics
+			<a href="{{ link('support/manage/topic/create', $topic) }}" class="button button--cta fa-pull-right">Create Topic</a>
+		</h2>
+		<div class="block-body">
+			<xf:datalist>
+				<xf:if is="$currentTopics is not empty">
+					<xf:foreach loop="$currentTopics" value="$child">
+						<xf:datarow rowclass="dataList-row">
+							<xf:cell class="dataList-cell--min dataList-cell--alt"
+									 href="/support/{$child.topic_id}/manage">
+								<i class="fa {$child.icon} fa-fw fa-2x" aria-hidden="true"></i>
+							</xf:cell>
+							<xf:main label="{$child.title}"
+									 href="/support/{$child.topic_id}/manage"
+									 explain="{$child.description}" />
+							<xf:cell class="dataList-cell--min dataList-cell--alt"
+									 href="{{ link('support/manage/topic/edit', $child) }}">
+								Edit
+							</xf:cell>
+						</xf:datarow>
+					</xf:foreach>
+				<xf:else />
+					<xf:datarow rowclass="dataList-row--noHover">
+						<xf:cell class="dataList-cell--min dataList-cell--alt">
+							<i class="fa fa-info-circle" aria-hidden="true"></i>
+						</xf:cell>
+						<xf:main label="There are no topics right now." />
+					</xf:datarow>
+				</xf:if>
+			</xf:datalist>
+		</div>
+	</div>
+</div>
+
+<xf:if is="$topic">
+	<div class="block">
+		<div class="block-container">
+			<h2 class="block-header">
+				Articles
+				<a href="/support/manage/article/{$topic.topic_id}/create" class="button button--cta fa-pull-right">Create Article</a>
+			</h2>
+			<div class="block-body">
+				<xf:datalist>
+					<xf:if is="$currentArticles is not empty">
+						<xf:foreach loop="$currentArticles" value="$article">
+							<xf:datarow rowclass="dataList-row">
+								<xf:cell class="dataList-cell--min dataList-cell--alt"
+										 href="/support/manage/article/{$article.article_id}/edit">
+									<i class="fa fa-file-text fa-fw fa-2x" aria-hidden="true"></i>
+								</xf:cell>
+								<xf:main label="{$article.title}"
+										 href="/support/manage/article/{$article.article_id}/edit" />
+							</xf:datarow>
+						</xf:foreach>
+					<xf:else />
+						<xf:datarow rowclass="dataList-row--noHover">
+							<xf:cell class="dataList-cell--min dataList-cell--alt">
+								<i class="fa fa-info-circle" aria-hidden="true"></i>
+							</xf:cell>
+							<xf:main label="There are no articles right now." />
+						</xf:datarow>
+					</xf:if>
+				</xf:datalist>
+			</div>
+		</div>
+	</div>
+</xf:if>]]></template>
+  <template type="public" title="kieran_support_comment_delete" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('kieran_support_comment_delete') }}</xf:title>
+
+<xf:form action="{{ link('support/comments/delete', $comment) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			
+			<xf:if is="$comment.is_ticket">
+				<xf:inforow>
+					<div class="blockMessage blockMessage--important"><strong>{{ phrase('note:') }}</strong> {{ phrase('this_is_first_comment_in_ticket') }}</div>
+				</xf:inforow>
+			</xf:if>
+			
+			<xf:if is="$comment.message_state == 'hidden'">
+				<xf:macro template="helper_action" name="delete_type" arg-canHardDelete="0" />
+			<xf:else />
+				<xf:macro template="helper_action" name="delete_type" arg-canHardDelete="{$ticket.canDelete('hard')}" />
+			</xf:if>
+		</div>
+		<xf:submitrow icon="delete" />
+	</div>
+</xf:form>]]></template>
+  <template type="public" title="kieran_support_filters" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:form action="{{ link('support/tickets/filters') }}">
+	<!--[XF:above_started_by]-->
+	<div class="menu-row menu-row--separated">
+		{{ phrase('started_by:') }}
+		<div class="u-inputSpacer">
+			<xf:textbox name="starter" value="{{ $starterFilter ? $starterFilter.username : '' }}" ac="single"
+				maxlength="{{ max_length($xf.visitor, 'username') }}" />
+		</div>
+	</div>
+
+	<div class="menu-row menu-row--separated">
+		{{ phrase('status:') }}
+		<xf:select name="status[]" size="2" multiple="multiple">
+			<xf:foreach loop="$allStatus" value="$status">
+				<xf:option value="{$status.status_id}">{{ $status.name }}</xf:option>
+			</xf:foreach>
+		</xf:select>
+	</div>
+
+	<div class="menu-row menu-row--separated">
+		{{ phrase('type:') }}
+		<xf:select name="type[]" size="2" multiple="multiple" value="">
+			<xf:foreach loop="$types" value="$type">
+				<xf:option value="{$type.type_id}">{{ $type.name }}</xf:option>
+			</xf:foreach>
+		</xf:select>
+	</div>
+
+	<div class="menu-row menu-row--separated">
+		{{ phrase('last_updated:') }}
+		<div class="u-inputSpacer">
+			<xf:select name="last_days" value="-1">
+				<xf:option value="-1">{{ phrase('any_time') }}</xf:option>
+				<xf:option value="7">{{ phrase('x_days', {'days': '7'}) }}</xf:option>
+				<xf:option value="14">{{ phrase('x_days', {'days': '14'}) }}</xf:option>
+				<xf:option value="30">{{ phrase('x_days', {'days': '30'}) }}</xf:option>
+				<xf:option value="60">{{ phrase('x_months', {'months': '2'}) }}</xf:option>
+				<xf:option value="90">{{ phrase('x_months', {'months': '3'}) }}</xf:option>
+				<xf:option value="182">{{ phrase('x_months', {'months': '6'}) }}</xf:option>
+				<xf:option value="365">{{ phrase('1_year') }}</xf:option>
+			</xf:select>
+		</div>
+	</div>
+	
+	<div class="menu-row menu-row--separated">
+		{{ phrase('created_between:') }}
+		<div class="u-inputSpacer">
+			<xf:dateinput name="date[start]" value="{$filters.date.start}" size="15" />
+		</div>
+		<div class="u-inputSpacer">
+			<xf:dateinput name="date[end]" value="{$filters.date.end}" size="15" />
+		</div>
+	</div>
+	
+	<div class="menu-row menu-row--separated">
+		{{ phrase('sort_by:') }}
+		<div class="inputGroup u-inputSpacer">
+			<xf:select name="order" value="{{ $filters.order ?: 'ticket_date' }}">
+				<xf:option value="status">{{ phrase('status') }}</xf:option>
+				<xf:option value="state">{{ phrase('state') }}</xf:option>
+				<xf:option value="created_by">{{ phrase('created_by') }}</xf:option>
+				<xf:option value="title">{{ phrase('title') }}</xf:option>
+				<xf:option value="created">{{ phrase('created') }}</xf:option>
+				<xf:option value="last_updated">{{ phrase('last_updated') }}</xf:option>
+			</xf:select>
+			<span class="inputGroup-splitter"></span>
+			<xf:select name="direction" value="{{ $filters.direction ?: 'asc' }}">
+				<xf:option value="desc">{{ phrase('descending') }}</xf:option>
+				<xf:option value="asc">{{ phrase('ascending') }}</xf:option>
+			</xf:select>
+		</div>
+	</div>
+	
+	<div class="menu-footer">
+		<span class="menu-footer-controls">
+			<xf:button type="submit" class="button--primary">{{ phrase('filter') }}</xf:button>
+		</span>
+	</div>
+	<xf:hiddenval name="apply">1</xf:hiddenval>
+</xf:form>]]></template>
+  <template type="public" title="kieran_support_ticket_assign" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('kieran_support_assign_ticket') }}</xf:title>
+
+<xf:breadcrumb href="{{ link('support/tickets') }}">{{ phrase('kieran_support_tickets') }}</xf:breadcrumb>
+<xf:breadcrumb href="{{ link('support/tickets', $ticket) }}">{$ticket.ticket_title} #{$ticket.ticket_id}</xf:breadcrumb>
+
+<xf:form action="/support/tickets/{$ticket.ticket_id}/assign/" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:selectrow name="user_id" value="{$ticket.assigned_user_id}" label="{{ phrase('member') }}">
+				<xf:option value="0" label="{{ phrase('(none)') }}" />
+				<xf:foreach loop="$moderators" value="$moderator">
+					<xf:option value="{$moderator.user_id}" label="{$moderator.username}" />
+				</xf:foreach>
+			</xf:selectrow>
+			
+			<xf:textarearow name="message" autosize="true" label="{{ phrase('comment') }}" hint="Optional" />
+			
+			<xf:selectrow name="is_awaiting" value="No" label="Comment response required" explain="If yes, the ticket author must respond to the comment within 3 days otherwise it will expire the ticket.">
+				<xf:option value="0" label="No" selected="true" />
+				<xf:option value="1" label="Yes" />
+			</xf:selectrow>
+		</div>
+		<xf:submitrow submit="{{ phrase('kieran_support_assign_ticket') }}" />
+	</div>
+</xf:form>]]></template>
+  <template type="public" title="kieran_support_ticket_create" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ $type.name }}</xf:title>
+<xf:description>Fill in the form below to create a ticket.</xf:description>
+
+<div class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:form action="{{ link('support/tickets/create') }}" ajax="true">
+				<xf:hiddenval name="type">{{ $type.type_id }}</xf:hiddenval>
+				<xf:textboxrow name="ticket_title" label="Ticket title" textbox-class="input--title" autofocus="autofocus" maxlength="{{ max_length('Kieran\Support:Ticket', 'ticket_title') }}" />
+
+				<xf:macro template="kieran_support_ticket_create_macro" name="fields" arg-set="{$type.fields}" />
+				
+				<xf:macro template="kieran_support_ticket_create_macro" name="body"
+						  arg-attachmentData="{$attachmentData}"
+						  arg-messageSelector=".js-message"
+						  arg-submitText="{{ phrase('kieran_support_ticket_create') }}"/>
+			
+				<xf:hiddenval name="apply">1</xf:hiddenval>
+			</xf:form>
+		</div>
+	</div>
+</div>]]></template>
+  <template type="public" title="kieran_support_ticket_create_macro" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:macro name="body"
+	arg-message=""
+	arg-attachmentData="{{ null }}"
+	arg-forceHash=""
+	arg-messageSelector=""
+	arg-submitText="">
+
+	<xf:js src="xf/message.js" min="1" />
+	<xf:css src="message.less" />
+
+	<dl class="formRow formRow--input">
+		<dt>
+			<div class="formRow-labelWrapper">
+				<label class="formRow-label">{{ phrase('message') }}</label>
+			</div>
+		</dt>
+		<dd>
+			<xf:editor name="message"
+					   value="{$message}"
+					   attachments="{{ $attachmentData ? $attachmentData.attachments : [] }}"
+					   data-min-height="150"/>
+
+			<xf:if is="$attachmentData">
+				<xf:macro template="helper_attach_upload" name="uploaded_files_list"
+						  arg-attachments="{$attachmentData.attachments}"
+						  arg-listClass="attachUploadList--spaced" />
+			</xf:if>
+
+			<div class="formButtonGroup">
+				<div class="formButtonGroup-primary">
+					<xf:button type="submit" class="button--primary">
+						{{ $submitText ?: phrase('post_reply') }}
+					</xf:button>
+				</div>
+				<xf:if contentcheck="true">
+					<div class="formButtonGroup-extra">
+						<xf:contentcheck>
+							<xf:if is="$attachmentData">
+								<xf:macro template="helper_attach_upload" name="upload_link_from_data"
+										  arg-attachmentData="{$attachmentData}"
+										  arg-forceHash="{$forceHash}" />
+							</xf:if>
+						</xf:contentcheck>
+					</div>
+				</xf:if>
+			</div>
+		</dd>
+	</dl>
+</xf:macro>
+
+<xf:macro name="fields" arg-set="!">
+	<xf:foreach loop="$set" value="$field">
+		<xf:macro name="custom_fields_edit_{$field.field_type}" arg-definition="{$field}" arg-editMode="{{ true }}" arg-namePrefix="custom_fields" />
+	</xf:foreach>
+</xf:macro>
+
+<xf:macro name="list" arg-set="!" arg-values="!" arg-valueClass="pairs pairs--columns pairs--fixedSmall">
+	<xf:foreach loop="$values" value="$value">
+		<xf:if is="{$set.{$value.field_id}}">
+			<dl class="{$valueClass}">
+				<dt>{$set.{$value.field_id}.title}</dt>
+				<dd>
+					<xf:macro name="custom_field_value"
+							  arg-definition="{{ $set.{$value.field_id} }}"
+							  arg-value="{$value.field_value}" />
+				</dd>
+			</dl>
+		</xf:if>
+	</xf:foreach>
+</xf:macro>
+
+<xf:macro name="custom_field_value" arg-definition="!" arg-value="!">
+	<xf:if is="$definition.field_type == 'stars'">
+		<xf:macro template="rating_macros" name="stars" arg-rating="{$value}" />
+	<xf:else />
+		<xf:if is="$definition.match_type == 'date'">
+			<xf:macro name="custom_field_value_date" arg-date="{$value}" />
+		<xf:elseif is="$definition.match_type == 'color'" />
+			<xf:macro name="custom_field_value_color" arg-color="{$value}" />
+		<xf:else />
+			{$definition.getFormattedValue($value)|raw}
+		</xf:if>
+	</xf:if>
+</xf:macro>
+
+
+<xf:macro name="custom_field_value_date" arg-date="!">
+	{{ date(date_from_format('Y-m-d', $date)) }}
+</xf:macro>
+
+<xf:macro name="custom_field_value_color" arg-color="!">
+	<span class="colorChip" data-xf-init="tooltip" title="{$color}">
+		<span class="colorChip-inner" style="background-color: {$color}">
+			<span class="colorChip-value">{$color}</span>
+		</span>
+	</span>
+</xf:macro>
+
+<xf:macro name="custom_fields_edit_textbox" arg-definition="!" arg-editMode="!" arg-namePrefix="custom_fields">
+
+	<xf:if is="$definition.match_type == 'date'">
+
+		<xf:dateinputrow name="{$namePrefix}[{$definition.field_id}]"
+			data-field="{$definition.field_id}"
+			maxlength="{{ $definition.max_length ? $definition.max_length : '' }}"
+			required="{{ $definition.isRequired($editMode) ? 'required' : '' }}"
+			class="field_{$definition.field_id}"
+			label="{$definition.title}" />
+
+	<xf:elseif is="$definition.match_type == 'color'" />
+
+		<xf:macro template="color_picker_macros" name="color_picker"
+			arg-name="{$namePrefix}[{$definition.field_id}]"
+			arg-mapName=""
+			arg-row="{{ true }}"
+			arg-required="{$definition.isRequired($editMode)}"
+			arg-label="{$definition.title}" />
+
+	<xf:else />
+
+		<xf:if is="$definition.match_type == 'number'">
+
+			<xf:set var="$type" value="number" />
+			<xf:set var="$step" value="1" />
+
+			<xf:if is="$definition.match_params.number_integer">
+				<xf:if is="$definition.match_params.number_min >= 0">
+					<xf:set var="$pattern" value="\d*" />
+				</xf:if>
+			<xf:else />
+				<xf:set var="$step" value="any" />
+			</xf:if>
+			<xf:if is="$definition.match_params.number_min !== ''">
+				<xf:set var="$min" value="{$definition.match_params.number_min}" />
+			</xf:if>
+			<xf:if is="$definition.match_params.number_max !== ''">
+				<xf:set var="$max" value="{$definition.match_params.number_max}" />
+			</xf:if>
+
+		<xf:elseif is="in_array($definition.match_type, ['regex', 'alphanumeric'])" />
+
+			<xf:set var="$type" value="text" />
+			<xf:set var="$pattern" value="{{ $definition.match_type == 'regex' ? $definition.match_params.regex : '\w+' }}" />
+			<xf:set var="$title">{{ phrase('please_enter_value_that_matches_required_format') }}</xf:set>
+
+		<xf:elseif is="in_array($definition.match_type, ['date', 'email', 'url', 'color'])" />
+
+			<xf:set var="$type" value="{$definition.match_type}" />
+
+		<xf:else />
+
+			<xf:set var="$type" value="text" />
+
+		</xf:if>
+		<xf:textboxrow name="{$namePrefix}[{$definition.field_id}]"
+			type="{$type}"
+			maxlength="{{ $definition.max_length ? $definition.max_length : '' }}"
+			pattern="{$pattern}"
+			title="{$title}"
+			min="{$min}"
+			max="{$max}"
+			step="{$step}"
+			required="{{ $definition.isRequired($editMode) ? 'required' : '' }}"
+			class="field_{$definition.field_id}"
+			label="{$definition.title}" />
+	</xf:if>
+</xf:macro>
+
+<xf:macro name="custom_fields_edit_textarea" arg-definition="!" arg-editMode="!" arg-namePrefix="custom_fields">
+
+	<xf:textarearow name="{$namePrefix}[{$definition.field_id}]"
+		maxlength="{{ $definition.max_length ? $definition.max_length : '' }}"
+		autosize="true"
+		required="{{ $definition.isRequired($editMode) ? 'required' : '' }}"
+		class="field_{$definition.field_id}"
+		label="{$definition.title}" />
+</xf:macro>
+
+<xf:macro name="custom_fields_edit_bbcode" arg-definition="!" arg-editMode="!" arg-namePrefix="custom_fields">
+
+	<xf:editorrow name="{$namePrefix}[{$definition.field_id}]"
+		previewable="0"
+		data-min-height="80"
+		class="field_{$definition.field_id}"
+		label="{$definition.title}" />
+</xf:macro>
+
+<xf:macro name="custom_fields_edit_select" arg-definition="!" arg-editMode="!" arg-multi="" arg-namePrefix="custom_fields">
+
+	<xf:selectrow name="{$namePrefix}[{$definition.field_id}]"
+		label="{$definition.title}"
+		multiple="{$multi}"
+		class="field_{$definition.field_id}">
+			<xf:option value="" />
+			<xf:options source="$definition.field_choices" />
+	</xf:selectrow>
+</xf:macro>
+
+<xf:macro name="custom_fields_edit_radio" arg-definition="!" arg-editMode="!" arg-namePrefix="custom_fields">
+
+	<xf:radiorow name="{$namePrefix}[{$definition.field_id}]"
+		required="{{ $definition.isRequired($editMode) ? 'required' : '' }}"
+		class="field_{$definition.field_id}"
+		listclass="listColumns"
+		label="{$definition.title}" >
+			<xf:if is="!$definition.isRequired($editMode)">
+				<xf:option value="">{{ phrase('no_selection') }}</xf:option>
+			</xf:if>
+			<xf:options source="$definition.field_choices" />
+	</xf:radiorow>
+</xf:macro>
+
+<xf:macro name="custom_fields_edit_checkbox" arg-definition="!" arg-editMode="!" arg-namePrefix="custom_fields">
+
+	<xf:checkboxrow name="{$namePrefix}[{$definition.field_id}]"
+		required="{{ $definition.isRequired($editMode) ? 'required' : '' }}"
+		listclass="field_{$definition.field_id} listColumns"
+		label="{$definition.title}">
+			<xf:options source="$definition.field_choices" />
+	</xf:checkboxrow>
+</xf:macro>
+
+<xf:macro name="custom_fields_edit_multiselect" arg-definition="!" arg-editMode="!" arg-namePrefix="custom_fields">
+
+	<xf:macro name="custom_fields_edit_select"
+		arg-definition="{$definition}"
+		arg-editMode="!"
+		arg-multi="1"
+		arg-namePrefix="{$namePrefix}"
+		label="{$definition.title}" />
+</xf:macro>
+
+
+<xf:macro name="custom_fields_edit_stars" arg-definition="!" arg-editMode="!" arg-namePrefix="custom_fields">
+
+	<xf:macro template="rating_macros" name="rating"
+		arg-name="{$namePrefix}[{$definition.field_id}]"
+		arg-deselectable="{{ $definition.isRequired($editMode) ? 'false' : 'true' }}"
+		arg-row="{{ true }}"
+		label="{$definition.title}" />
+</xf:macro>]]></template>
+  <template type="public" title="kieran_support_ticket_create_start" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:form action="{{ link('support/tickets/create') }}">
+	<div class="menu-row menu-row--separated">
+		{{ phrase('kieran_support_ticket_type:') }}
+		<div class="inputGroup u-inputSpacer">
+			<xf:select name="type">
+				<xf:foreach loop="$types" value="$type">	
+					<xf:option value="{$type.type_id}">{{ $type.name }}</xf:option>
+				</xf:foreach>
+			</xf:select>
+		</div>
+	</div>
+	<div class="menu-footer">
+		<span class="menu-footer-controls">
+			<xf:button type="submit" class="button--primary">{{ phrase('kieran_support_ticket_create') }}</xf:button>
+		</span>
+	</div>
+</xf:form>]]></template>
+  <template type="public" title="kieran_support_ticket_delete" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('kieran_support_delete_ticket') }}</xf:title>
+
+<xf:breadcrumb href="{{ link('/support/tickets') }}">{{ phrase('kieran_support_tickets') }}</xf:breadcrumb>
+<xf:breadcrumb href="{{ link('/support/tickets', $ticket) }}">{$ticket.ticket_title} #{$ticket.ticket_id}</xf:breadcrumb>
+
+<xf:form action="/support/tickets/{$ticket.ticket_id}/delete/" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:if is="$ticket.state == 'hidden'">
+				<xf:macro template="helper_action" name="delete_type" arg-canHardDelete="0" />
+			<xf:else />
+				<xf:macro template="helper_action" name="delete_type" arg-canHardDelete="{$ticket.canDelete('hard')}" />
+			</xf:if>
+		</div>
+		<xf:submitrow icon="delete" />
+	</div>
+</xf:form>]]></template>
+  <template type="public" title="kieran_support_ticket_lock" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('kieran_support_ticket_lock') }}</xf:title>
+
+<xf:breadcrumb href="{{ link('/support/tickets') }}">{{ phrase('kieran_support_tickets') }}</xf:breadcrumb>
+<xf:breadcrumb href="{{ link('/support/tickets', $ticket) }}">{$ticket.ticket_title} #{$ticket.ticket_id}</xf:breadcrumb>
+
+<xf:form action="/support/tickets/{$ticket.ticket_id}/lock/" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:textarearow name="message" value="{$ticket.draft_comment.message}"
+							autosize="true" label="{{ phrase('comment') }}" hint="Optional" />
+		</div>
+		<xf:submitrow submit="{{ phrase('kieran_support_ticket_lock') }}" />
+	</div>
+</xf:form>]]></template>
+  <template type="public" title="kieran_support_ticket_restore" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('kieran_support_restore_ticket') }}</xf:title>
+
+<xf:breadcrumb href="{{ link('/support/tickets') }}">{{ phrase('kieran_support_tickets') }}</xf:breadcrumb>
+<xf:breadcrumb href="{{ link('/support/tickets', $ticket) }}">{$ticket.ticket_title} #{$ticket.ticket_id}</xf:breadcrumb>
+
+<xf:form action="/support/tickets/{$ticket.ticket_id}/delete/" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:macro template="helper_action" name="delete_type" arg-canHardDelete="{$ticket.canDelete('hard')}" />
+		</div>
+		<xf:submitrow icon="delete" />
+	</div>
+</xf:form>]]></template>
+  <template type="public" title="kieran_support_ticket_status" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('kieran_support_ticket_change_status') }}</xf:title>
+
+<xf:breadcrumb href="{{ link('support/tickets') }}">{{ phrase('kieran_support_tickets') }}</xf:breadcrumb>
+<xf:breadcrumb href="{{ link('support/tickets', $ticket) }}">{$ticket.ticket_title} #{$ticket.ticket_id}</xf:breadcrumb>
+
+<xf:wrap template="kieran_support_wrapper">
+	<xf:set var="$pageSelected" value="{{ $xf.visitor.user_id == $ticket.user_id ? 'tickets' : 'manage' }}" />
+</xf:wrap>
+
+<xf:form action="{{ link('support/tickets/status', $ticket) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:textboxrow name="status_label" label="{{ phrase('status') }}" disabled="true" value="{$status.name}" />
+			<xf:hiddenval name="status">{{ $status.status_id }}</xf:hiddenval>
+			<xf:hiddenval name="apply">1</xf:hiddenval>
+			
+			<xf:macro template="kieran_support_ticket_create_macro" name="fields" arg-set="{$status.fields}" />
+				
+			<xf:textarearow name="message" autosize="true" label="{{ phrase('comment') }}" hint="Optional" />
+		</div>
+		
+		<xf:submitrow submit="{{ phrase('update') }}" />
+	</div>
+</xf:form>]]></template>
+  <template type="public" title="kieran_support_ticket_status_start" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('kieran_support_ticket_change_status') }}</xf:title>
+
+<xf:breadcrumb href="{{ link('support/tickets') }}">{{ phrase('kieran_support_tickets') }}</xf:breadcrumb>
+<xf:breadcrumb href="{{ link('support/tickets', $ticket) }}">{$ticket.ticket_title} #{$ticket.ticket_id}</xf:breadcrumb>
+
+<xf:wrap template="kieran_support_wrapper">
+	<xf:set var="$pageSelected" value="{{ $xf.visitor.user_id == $ticket.user_id ? 'tickets' : 'manage' }}" />
+</xf:wrap>
+
+<xf:form action="{{ link('support/tickets/status', $ticket) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:selectrow name="status" label="{{ phrase('status') }}">
+				<xf:foreach loop="$ticket.TicketType.statuses" value="$status">
+					<xf:if is="$ticket.status_id != $status.status_id">
+						<xf:option value="{$status.status_id}" selected="{{ $status.status_id == 'open'}}">{{ $status.name }}</xf:option>
+					</xf:if>
+				</xf:foreach>
+			</xf:selectrow>
+		</div>
+		
+		<xf:submitrow submit="{{ phrase('update') }}" />
+	</div>
+</xf:form>]]></template>
+  <template type="public" title="kieran_support_tickets" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:title>My tickets</xf:title>
+<xf:description>View, update and track your tickets.</xf:description>
+<xf:wrap template="kieran_support_wrapper">
+	<xf:set var="$pageSelected" value="tickets" />
+</xf:wrap>
+
+<div class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:datalist data-xf-init="responsive-data-list">
+				<xf:datarow rowtype="header">
+					<xf:cell>Status</xf:cell>
+					<xf:cell>Title</xf:cell>
+					<xf:cell>Created</xf:cell>
+					<xf:cell>Last updated</xf:cell>
+				</xf:datarow>
+				<xf:if is="$xf.visitor.user_id">
+					<xf:if is="$tickets is not empty">
+						<xf:foreach loop="$tickets" value="$ticket">
+							<xf:datarow rowclass="dataList-row">
+								<xf:cell class="dataList-cell--min" href="{{ link('support/tickets', $ticket) }}">
+									<span>
+										<span class="smilieText">{$ticket.status.name}</span>
+									</span>
+								</xf:cell>
+								<xf:main label="{$ticket.ticket_title}" href="{{ link('support/tickets', $ticket) }}" hint="#{$ticket.ticket_id}" />
+								<xf:cell class="contentRow-minor" href="{{ link('support/tickets', $ticket) }}"><xf:date time="{$ticket.ticket_date}" /></xf:cell>
+								<xf:cell class="contentRow-minor" href="{{ link('support/tickets', $ticket) }}"><xf:date time="{$ticket.last_modified_date}" /></xf:cell>
+							</xf:datarow>
+						</xf:foreach>
+					<xf:else />
+						<xf:datarow rowclass="dataList-row--noHover">
+							<xf:cell class="dataList-cell--min dataList-cell--alt">
+								<i class="fa fa-info-circle" aria-hidden="true"></i>
+							</xf:cell>
+							<xf:main colspan="3" label="You have not created any tickets." />
+						</xf:datarow>
+					</xf:if>
+				<xf:else />
+					<xf:datarow rowclass="dataList-row--noHover">
+						<xf:cell class="dataList-cell--min dataList-cell--alt">
+							<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+						</xf:cell>
+						<xf:main colspan="3" label="You must be registered and logged in to view your tickets." />
+					</xf:datarow>
+				</xf:if>
+			</xf:datalist>
+		</div>
+	</div>
+</div>]]></template>
+  <template type="public" title="kieran_support_tickets_manage" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:if is="$assigned">
+	<xf:title>Assigned tickets</xf:title>
+	<xf:description>View, update and track all your assigned tickets.</xf:description>
+	<xf:set var="$pageSelected" value="assigned" />
+<xf:else />
+	<xf:title>All tickets</xf:title>
+	<xf:description>View, update and track all tickets.</xf:description>
+	<xf:set var="$pageSelected" value="all" />
+</xf:if>
+<xf:wrap template="kieran_support_wrapper" />
+
+<xf:css src="kieran_support_tickets_manage.less" />
+<xf:css src="prefix_menu.less" />
+
+<div class="block">
+	<div class="block-outer">
+		<xf:trim>
+			<xf:pagenav page="{$page}" perpage="{$perPage}" total="{$total}"
+			link="{{ link('support/tickets/manage') }}" data="null" params="{$filters}"
+			wrapperclass="block-outer-main" />
+		</xf:trim>
+	</div>
+	
+	<div class="block-container">
+		<div class="block-filterBar">
+			<div class="filterBar">
+				<a class="filterBar-menuTrigger" data-xf-click="menu" role="button" tabindex="0" aria-expanded="false" aria-haspopup="true">{{ phrase('filters') }}</a>
+				<div class="menu menu--wide" data-menu="menu" aria-hidden="true"
+					 data-href="{{ link('support/tickets/filters', null, $filters) }}"
+					 data-load-target=".js-filterMenuBody">
+					<div class="menu-content">
+						<h4 class="menu-header">{{ phrase('show_only:') }}</h4>
+						<div class="js-filterMenuBody">
+							<div class="menu-row">{{ phrase('loading...') }}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="block-body">
+			
+			<xf:datalist data-xf-init="responsive-data-list">
+				<xf:datarow rowtype="header">
+					<xf:cell>Status</xf:cell>
+					<xf:cell>Creator</xf:cell>
+					<xf:cell>Title</xf:cell>
+					<xf:cell>Last updated</xf:cell>
+					<xf:if is="!$assigned">
+						<xf:cell>Assignee</xf:cell>
+					</xf:if>
+				</xf:datarow>
+				<xf:if is="$xf.visitor.user_id">
+					<xf:if is="$tickets is not empty">
+						<xf:foreach loop="$tickets" value="$ticket">
+							<xf:datarow rowclass="dataList-row status--{$ticket.status} state--{$ticket.state}">
+								<xf:cell class="dataList-cell--min" href="{{ link('support/tickets', $ticket) }}">
+									<span>
+										<span class="smilieText">{$ticket.status.name}</span>
+									</span>
+								</xf:cell>
+								<xf:cell class="contentRow"><xf:username user="$ticket.User" rich="true" /></xf:cell>
+								<xf:main label="{$ticket.ticket_title}" href="{{ link('support/tickets', $ticket) }}" hint="#{$ticket.ticket_id}" />
+								<xf:cell class="contentRow-minor" href="{{ link('support/ticket/', $ticket) }}"><xf:date time="{$ticket.ticket_date}" /></xf:cell>	
+								<xf:if is="!$assigned">
+									<xf:cell class="contentRow">
+										<xf:if is="$ticket.assigned_user_id">
+											<xf:username user="$ticket.AssignedUser" rich="true" />
+										<xf:else />
+											N/A
+										</xf:if>
+									</xf:cell>
+								</xf:if>
+							</xf:datarow>
+						</xf:foreach>
+					<xf:else />
+						<xf:datarow rowclass="dataList-row--noHover">
+							<xf:cell class="dataList-cell--min dataList-cell--alt">
+								<i class="fa fa-info-circle" aria-hidden="true"></i>
+							</xf:cell>
+							<xf:main colspan="3" label="No tickets available." />
+						</xf:datarow>
+					</xf:if>
+				<xf:else />
+					<xf:datarow rowclass="dataList-row--noHover">
+						<xf:cell class="dataList-cell--min dataList-cell--alt">
+							<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+						</xf:cell>
+						<xf:main colspan="3" label="You must be registered and logged in to view your tickets." />
+					</xf:datarow>
+				</xf:if>
+			</xf:datalist>
+		</div>
+	</div>
+</div>]]></template>
+  <template type="public" title="kieran_support_tickets_manage.less" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[.state {
+
+	&--hidden {
+		background-color: #ecf0f1;
+	}
+	
+	&--locked {
+		background-color: #ffefb1;
+	}
+}
+
+.status {
+	
+	&--new {
+		background-color: #afe2c4;
+	}
+}]]></template>
+  <template type="public" title="kieran_support_topic_edit" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:if is="$topic.isInsert()">
+	<xf:title>Create Topic</xf:title>
+	<xf:else />
+	<xf:title>Edit Topic: {$topic.title}</xf:title>
+
+	<xf:pageaction>
+		<xf:button href="{{ link('support/manage/topic/delete', $topic) }}" icon="delete">{{ phrase('delete') }}</xf:button>
+	</xf:pageaction>
+
+</xf:if>
+
+<xf:wrap template="kieran_support_wrapper">
+	<xf:set var="$pageSelected" value="create" />
+</xf:wrap>
+
+
+<div class="block">
+	<xf:form action="{{ link('support/manage/topic/save', $topic) }}" ajax="true" class="block-container" novalidate="novalidate">
+		<div class="block-body">
+
+			<xf:if is="$topic.Parent">
+				<xf:textboxrow value="{$topic.Parent.title}" disabled="true"
+							   label="{{ phrase('Parent') }}" />
+				<xf:hiddenval name="parent_topic_id">{$topic.Parent.topic_id}</xf:hiddenval>
+			</xf:if>
+
+			<xf:textboxrow name="title" value="{$topic.title}"
+						   label="{{ phrase('title') }}" />
+
+			<xf:textarearow name="description" value="{$topic.description}" autosize="true"
+							label="{{ phrase('description') }}" />
+
+			<xf:textboxrow name="icon" value="{$topic.icon}"
+						   label="{{ phrase('Icon') }}" />
+
+			<xf:numberboxrow name="display_order" value="{$topic.display_order}" min="1"
+							 label="{{ phrase('display_order') }}" />
+
+			<xf:numberboxrow name="view_power_required" value="{$topic.view_power_required}" min="1"
+							 label="{{ phrase('view_power_required') }}" />
+		</div>
+
+		<xf:submitrow icon="save" sticky="true" />
+	</xf:form>
+</div>]]></template>
+  <template type="public" title="kieran_support_topic_view" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{$topic.title}</xf:title>
+<xf:description>{$topic.description}</xf:description>
+
+<xf:wrap template="kieran_support_wrapper">
+	<xf:set var="$pageSelected" value="{$topic.slug}" />
+</xf:wrap>
+
+<xf:if is="$topic.Children is not empty">
+	<div class="block">
+		<div class="block-container">
+			<h2 class="block-formSectionHeader">
+				Topics
+			</h2>
+			<div class="block-body">
+				<xf:datalist>
+					<xf:foreach loop="$topic.Children" value="$child">
+						<xf:datarow rowclass="dataList-row">
+							<xf:cell class="dataList-cell--min dataList-cell--alt"
+									 href="/support/{$child.slug}/">
+								<i class="fa {$child.icon} fa-fw fa-2x" aria-hidden="true"></i>
+							</xf:cell>
+							<xf:main label="{$child.title}"
+									 href="/support/{$child.slug}/" 
+									 explain="{$topic.description}" />
+						</xf:datarow>
+					</xf:foreach>
+				</xf:datalist>
+			</div>
+		</div>
+	</div>
+</xf:if>
+
+<div class="block">
+	<div class="block-container">
+		<h2 class="block-header">
+			Articles
+		</h2>
+		<div class="block-body">
+			<xf:datalist>
+				<xf:if is="$articles is not empty">
+					<xf:foreach loop="$articles" value="$article">
+						<xf:datarow rowclass="dataList-row">
+							<xf:cell class="dataList-cell--min dataList-cell--alt"
+									 href="/support/{$topic.slug}/{$article.slug}/">
+								<i class="fa fa-file-text fa-fw fa-2x" aria-hidden="true"></i>
+							</xf:cell>
+							<xf:main label="{$article.title}"
+									 href="/support/{$topic.slug}/{$article.slug}/" />
+						</xf:datarow>
+					</xf:foreach>
+					<xf:else />
+					<xf:datarow rowclass="dataList-row--noHover">
+						<xf:cell class="dataList-cell--min dataList-cell--alt">
+							<i class="fa fa-info-circle" aria-hidden="true"></i>
+						</xf:cell>
+						<xf:main label="Sorry, there are no articles right now." />
+					</xf:datarow>
+				</xf:if>
+			</xf:datalist>
+		</div>
+	</div>
+</div>]]></template>
+  <template type="public" title="kieran_support_view_ticket" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{$ticket.ticket_title} #{$ticket.ticket_id}</xf:title>
+<xf:h1>{$ticket.ticket_title} <span class="u-muted">#{$ticket.ticket_id}</span></xf:h1>
+
+<xf:wrap template="kieran_support_wrapper">
+	<xf:set var="$pageSelected" value="{{ $xf.visitor.user_id == $ticket.user_id ? 'ticket' : 'manage' }}" />
+</xf:wrap>
+
+<xf:if is="$xf.visitor.user_id == $ticket.user_id">
+	<xf:breadcrumb href="{{ link('support/tickets') }}">{{ phrase('kieran_support_tickets') }}</xf:breadcrumb>
+<xf:else />
+	<xf:breadcrumb href="{{ link('support/tickets/manage') }}">{{ phrase('kieran_support_tickets_manage') }}</xf:breadcrumb>
+</xf:if>
+
+<xf:css src="kieran_support_view_ticket.less" />
+
+<xf:description meta="false">
+	<ul class="listInline listInline--bullet">
+		<li>
+			<i class="fa fa-user" aria-hidden="true" title="{{ phrase('thread_starter') }}"></i>
+			<span class="u-srOnly">{{ phrase('thread_starter') }}</span>
+
+			<xf:username user="{$ticket.User}" class="u-concealed" />
+		</li>
+		<li>
+			<i class="fa fa-clock-o" aria-hidden="true" title="{{ phrase('start_date') }}"></i>
+			<span class="u-srOnly">{{ phrase('start_date') }}</span>
+
+			<span class="u-concealed"><xf:date time="{$ticket.ticket_date}" /></span>
+		</li>
+	</ul>
+</xf:description>
+
+<div class="block">
+	<xf:if is="$ticket.status.message != '' && $xf.visitor.user_id == $ticket.user_id">
+		<div class="blockMessage blockMessage--{$ticket.status.status_id} blockMessage--iconic">
+			{$ticket.status.message}
+		</div>
+	</xf:if>
+	
+	<xf:if is="$ticket.isClosed() or $ticket.state == 'locked'">
+		<div class="block-outer">
+			<dl class="blockStatus">
+				<dt>{{ phrase('status') }}</dt>
+				<dd class="blockStatus-message blockStatus-message--locked">
+					{{ phrase('not_open_for_further_replies') }}
+				</dd>
+			</dl>
+		</div>
+	</xf:if>
+
+	<xf:if is="!$ticket.isClosed()">
+		<div class="block-outer"><xf:trim>
+			<div class="block-outer-opposite">
+				<div class="buttonGroup">
+						<xf:if is="$ticket.state == 'hidden' AND $ticket->canDelete('soft')">
+							<xf:button href="{{ link('support/tickets/restore', $ticket) }}" class="button--link">
+								{{ phrase('restore') }}
+							</xf:button>
+						</xf:if>
+
+						<xf:if is="$xf.visitor.user_id != $ticket.user_id">
+							<xf:if is="$ticket.isWatching()">
+								<xf:button href="{{ link('support/tickets/unwatch', $ticket) }}" class="button--link">{{ phrase('unwatch') }}</xf:button>
+								<xf:else />
+								<xf:button href="{{ link('support/tickets/watch', $ticket) }}" class="button--link">{{ phrase('watch') }}</xf:button>
+							</xf:if>
+						</xf:if>
+
+						<xf:if is="$ticket->canProcess()">
+							<xf:if contentcheck="true">
+								<div class="buttonGroup-buttonWrapper">
+									<xf:button class="button--link menuTrigger" data-xf-click="menu" aria-expanded="false" aria-haspopup="true" title="{{ phrase('more_options')|for_attr }}">&#8226;&#8226;&#8226;</xf:button>
+									<div class="menu" data-menu="menu" aria-hidden="true">
+										<div class="menu-content">
+											<h4 class="menu-header">{{ phrase('more_options') }}</h4>
+											<xf:contentcheck>
+												<a href="{{ link('support/tickets/assign', $ticket) }}" data-xf-click="overlay" class="menu-linkRow">{{ phrase('kieran_support_assign_ticket') }}</a>
+
+												<a href="{{ link('support/tickets/status', $ticket) }}" data-xf-click="overlay" class="menu-linkRow">{{ phrase('kieran_support_ticket_change_status') }}</a>
+
+												<xf:if is="($ticket->canDelete('soft') and $ticket.state != 'hidden') or $ticket->canDelete('hard') and $ticket.state == 'hidden'">
+													<a href="{{ link('support/tickets/delete', $ticket) }}" class="menu-linkRow" data-xf-click="overlay">{{ phrase('kieran_support_delete_ticket') }}</a>
+												</xf:if>
+											</xf:contentcheck>
+										</div>
+									</div>
+								</div>
+							</xf:if>
+						</xf:if>
+				</div>
+			</div>
+		</xf:trim></div>
+		</xf:if>
+	
+	<div class="block-container">
+		<h3 class="block-header">{{ phrase('comments') }}</h3>
+		<div class="block-body">
+			<xf:foreach loop="$messages" value="$comment">
+				<article class="message message--simple message-state--{$comment.message_state}">
+					<div class="message-inner">
+						<div class="message-cell message-cell--user">
+							<xf:macro template="message_macros" name="user_info_simple" arg-user="{$comment.User}" />
+						</div>
+						<div class="message-cell message-cell--main">
+							<span class="u-anchorTarget" id="ticket-comment-{$comment.ticket_comment_id}"></span>
+							<div class="message-content">
+								<header class="message-attribution message-attribution--plain">
+									<ul class="listInline listInline--bullet">
+										<li class="message-attribution-user">
+											<xf:avatar user="$comment.User" size="xxs" />
+											<h4 class="attribution"><xf:username user="$comment.User" rich="true" /></h4>
+										</li>
+										<li><a href="#comment-{$comment.ticket_comment_id}" class="u-concealed"><xf:date time="$comment.comment_date" /></a></li>
+										
+										<xf:if is="$comment.message_state == 'hidden'">
+											<li>{{ phrase('kieran_support_comment_hidden') }}</li>
+										</xf:if>
+									</ul>
+								</header>
+
+								<article class="message-body">
+									<xf:if is="$comment.status_change">
+										<div class="message-minorHighlight">
+											{{ phrase('status_changed:') }} {$comment.status.name}
+										</div>
+									</xf:if>
+
+									<xf:if is="$comment.assigned_user_id != 0">
+										<div class="message-minorHighlight">
+											{{ phrase('assigned_to:') }} <xf:username user="$comment.AssignedUser" />
+										</div>
+									</xf:if>
+
+									<xf:if is="$comment.message">
+										{{ bb_code($comment.message, 'ticket_comment', $comment.User) }}
+									</xf:if>
+
+									<xf:macro template="kieran_support_ticket_create_macro" name="list" arg-set="{$ticket.TicketType.fields}" arg-values="{$comment.FieldValues}" />
+
+								</article>
+
+								<xf:if is="$comment.attach_count">
+									<xf:macro template="message_macros" name="attachments"
+											  arg-attachments="{$comment.Attachments}"
+											  arg-message="{$comment}"
+											  arg-canView="{{ true }}" />
+								</xf:if>
+								
+								<footer class="message-footer">
+									<xf:if contentcheck="true">
+										<div class="message-actionBar actionBar">
+											<xf:contentcheck>
+												<xf:if contentcheck="true">
+													<div class="actionBar-set actionBar-set--external">
+													<xf:contentcheck>
+														<xf:if is="$xf.visitor.canViewIps() && $comment.ip_id">
+															<a href="{{ link('support/comments/ip', $comment) }}"
+																class="actionBar-action actionBar-action--ip actionBar-action--menuItem"
+																data-xf-click="overlay">{{ phrase('ip') }}</a>
+
+															<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+														</xf:if>
+														<xf:if is="$ticket.canDelete('soft')">
+															<xf:if is="$comment.message_state == 'hidden'">
+																<a href="{{ link('support/comments/restore', $comment) }}"
+																	class="actionBar-action actionBar-action--delete actionBar-action--menuItem">{{ phrase('kieran_support_restore_comment') }}</a>
+															</xf:if>
+															<xf:if is="($ticket->canDelete('soft') and $ticket.state != 'hidden') or $ticket->canDelete('hard') and $ticket.state == 'hidden'">
+																<a href="{{ link('support/comments/delete', $comment) }}"
+																	class="actionBar-action actionBar-action--delete actionBar-action--menuItem"
+																	data-xf-click="overlay">{{ phrase('kieran_support_delete_comment') }}</a>
+															</xf:if>
+
+															<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+														</xf:if>
+														<xf:if is="$hasActionBarMenu">
+															<a class="actionBar-action actionBar-action--menuTrigger"
+																data-xf-click="menu"
+																title="{{ phrase('more_options')|for_attr }}"
+																role="button"
+																tabindex="0"
+																aria-expanded="false"
+																aria-haspopup="true">&#8226;&#8226;&#8226;</a>
+
+															<div class="menu" data-menu="menu" aria-hidden="true" data-menu-builder="actionBar">
+																<div class="menu-content">
+																	<h4 class="menu-header">{{ phrase('more_options') }}</h4>
+																	<div class="js-menuBuilderTarget"></div>
+																</div>
+															</div>
+														</xf:if>
+													</xf:contentcheck>
+													</div>
+												</xf:if>
+
+											</xf:contentcheck>
+										</div>
+									</xf:if>
+									<div class="js-historyTarget message-historyTarget toggleTarget" data-href="trigger-href"></div>
+								</footer>
+							</div>
+						</div>
+					</div>
+				</article>
+			</xf:foreach>
+		</div>
+	</div>
+	
+	<xf:if is="$ticket.isClosed() or $ticket.state == 'locked'">
+		<div class="block-outer block-outer--after">
+			<dl class="blockStatus">
+				<dt>{{ phrase('status') }}</dt>
+				<dd class="blockStatus-message blockStatus-message--locked">
+					{{ phrase('not_open_for_further_replies') }}
+				</dd>
+			</dl>
+		</div>
+	</xf:if>
+</div>
+
+<div class="block">
+	<xf:if is="{{$ticket.canProcess() or $ticket.state != 'locked'}} and !$ticket.isClosed()">
+		<xf:form action="{{ link('support/tickets/reply', $ticket) }}"
+			ajax="true"
+			draft="{{ link('support/tickets/draft', $ticket) }}"
+			class="block js-quickReply"
+			data-xf-init="attachment-manager quick-reply">
+
+			<div class="block-container">
+				<div class="block-body">
+					<xf:macro template="quick_reply_macros" name="body"
+						arg-attachmentData="{$attachmentData}"
+						arg-messageSelector=".js-message"
+						arg-showPreviewButton="{{ false }}"
+						arg-simple="{{ true }}" />
+				</div>
+			</div>
+		</xf:form>
+	</xf:if>
+</div>
+
+<xf:css src="message.less" />
+<xf:js src="xf/message.js" min="1" />]]></template>
+  <template type="public" title="kieran_support_view_ticket.less" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[.message-state {
+
+	&--hidden {
+		background-color: #ecf0f1;
+		.message-userArrow:after {
+			border-right-color: #ecf0f1;
+		}
+	}
+}
+
+.blockMessage {
+	
+	border-left: 3px solid;
+	min-height: 26px;
+	
+	&::before {
+		font-size: 22px;
+	}
+	
+	&--new {
+		background:#fbf7e2;
+		color:#84653d;
+		
+		&::before {
+			content: "\f071";
+		}
+	}
+	
+	&--closed {
+		border-left-color: #63b265;
+		background: #daf3d8;
+		color: #3d793f;
+		
+		&::before {
+			content: "\f058";
+		}
+	}
+	
+	&--awaiting {
+		border-left-color: #906239;	
+		background: #f1c40f;
+		color: #604E06;
+		
+		&::before {
+			content: "\f253";
+		}
+	}
+}]]></template>
+  <template type="public" title="kieran_support_wrapper" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:sidenav>
+	<div class="block">
+		<div class="block-container">
+			<h3 class="block-header">{{ phrase('navigation') }}</h3>
+			<div class="block-body">
+				<a class="blockLink {{ $pageSelected == 'index' ? 'is-selected' : '' }}"
+				   href="{{ link('support') }}"><i class="fa fa-life-ring fa-fw" aria-hidden="true"></i>&nbsp;Overview</a>
+				<h2 class="block-formSectionHeader">
+					Tickets
+				</h2>
+				<a class="blockLink {{ ($pageSelected == 'tickets' || $pageSelected == 'ticket') ? 'is-selected' : '' }}"
+				   href="{{ link('support/tickets') }}"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i>&nbsp;My&nbsp;tickets</a>
+				<xf:if is="$canManage">
+					<a class="blockLink {{ $pageSelected == 'assigned' ? 'is-selected' : '' }}"
+				   		href="{{ link('support/tickets/assigned') }}"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>&nbsp;Assigned&nbsp;tickets</a>
+					<a class="blockLink {{ $pageSelected == 'all' ? 'is-selected' : '' }}"
+				   		href="{{ link('support/tickets/manage') }}"><i class="fa fa-cogs fa-fw" aria-hidden="true"></i>&nbsp;All&nbsp;tickets</a>
+				</xf:if>
+				
+				<xf:if contentcheck="true">
+					<h2 class="block-formSectionHeader">
+						Topics
+					</h2>
+					<xf:contentcheck>
+						<xf:if is="$canManageArticles">
+							<a class="blockLink {{ $pageSelected == 'manage' ? 'is-selected' : '' }}"
+							   href="{{ link('support/manage') }}"><i class="fa fa-cogs fa-fw" aria-hidden="true"></i>&nbsp;Manage</a>
+						</xf:if>
+						<xf:if is="$topics is not empty">
+							<xf:foreach loop="$topics" value="$topic">
+								<a class="blockLink {{ $pageSelected == $topic.slug ? 'is-selected' : '' }}"
+								   href="/support/{$topic.slug}/"><i class="fa {$topic.icon} fa-fw" aria-hidden="true"></i>&nbsp;{$topic.title}</a>
+							</xf:foreach>
+						</xf:if>
+					</xf:contentcheck>
+				</xf:if>
+			</div>
+		</div>
+	</div>
+</xf:sidenav>
+
+<xf:if is="$canCreate and $pageSelected != 'create' and $pageSelected != 'ticket' and $pageSelected != 'all' and $pageSelected != 'assigned' and $pageSelected != 'manage'">
+	<xf:pageaction>
+		<div class="filterBar">
+			<xf:button class="button button--cta menuTrigger" icon="write" data-xf-click="menu" aria-expanded="false" aria-haspopup="true">{{ phrase('kieran_support_ticket_create') }}</xf:button>
+			<div class="menu menu--wide" data-menu="menu" aria-hidden="true"
+				 data-href="{{ link('support/tickets/create') }}"
+				 data-load-target=".js-filterMenuBody">
+				<div class="menu-content">
+					<h4 class="menu-header">{{ phrase('kieran_support_ticket_create:') }}</h4>
+					<div class="js-filterMenuBody">
+						<div class="menu-row">{{ phrase('loading...') }}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</xf:pageaction>
+</xf:if>
+
+<xf:page option="sideNavTitle">{{ phrase('navigation') }}</xf:page>
+
+{$innerContent|raw}]]></template>
+</templates>

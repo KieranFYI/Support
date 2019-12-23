@@ -1,0 +1,14 @@
+{
+    "legacy_addon_id": "",
+    "title": "Kieran/Support",
+    "description": "A support ticket system with a self-service knowledge base.",
+    "version_id": 1000000,
+    "version_string": "1.0.0 Beta",
+    "dev": "Kieran Anderson",
+    "dev_url": "https://github.com/KieranFYI",
+    "faq_url": "",
+    "support_url": "https://github.com/KieranFYI/Support/issues",
+    "extra_urls": [],
+    "require": [],
+    "icon": "fa-tasks"
+}

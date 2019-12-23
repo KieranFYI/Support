@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<admin_navigation>
+  <admin_navigation_entry navigation_id="support" display_order="15001" link="support" icon="fa-tasks" admin_permission_id="option" debug_only="0" development_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="supportFields" parent_navigation_id="support" display_order="30" link="support-fields" admin_permission_id="option" debug_only="0" development_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="supportStatus" parent_navigation_id="support" display_order="20" link="support/statuses" admin_permission_id="option" debug_only="0" development_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="supportTypes" parent_navigation_id="support" display_order="1" link="support/types" admin_permission_id="option" debug_only="0" development_only="0" hide_no_children="0"/>
+</admin_navigation>
