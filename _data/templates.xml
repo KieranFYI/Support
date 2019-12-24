@@ -199,54 +199,16 @@
 		<xf:submitrow icon="save" sticky="true" />
 	</xf:form>
 </div>]]></template>
+  <template type="admin" title="ticket_field_delete" version_id="1000000" version_string="1.0.0 Beta"><![CDATA[<xf:include template="base_custom_field_delete" />]]></template>
   <template type="admin" title="ticket_field_edit" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:include template="base_custom_field_edit">
 	<xf:set var="$extraOptions">
 		<xf:macro template="base_custom_field_macros" name="common_options"
 			arg-field="{$field}" />
 	</xf:set>
 </xf:include>]]></template>
-  <template type="admin" title="ticket_field_list" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:pageaction>
-	<xf:button href="{{ link($prefix . '/add') }}" icon="add">{{ phrase('add_field') }}</xf:button>
-</xf:pageaction>
+  <template type="admin" title="ticket_field_list" version_id="1000000" version_string="1.0.0 Beta"><![CDATA[<xf:title>{{ phrase('kieran_support_ticket_fields') }}</xf:title>
 
-<xf:if is="$fieldsGrouped is not empty">
-	<xf:form action="{{ link($prefix . '/toggle') }}" class="block" ajax="true">
-		<div class="block-outer">
-			<xf:macro template="filter_macros" name="quick_filter" arg-key="user-fields" arg-class="block-outer-opposite" />
-		</div>
-		<div class="block-container">
-			<div class="block-body">
-				<xf:datalist>
-					<xf:foreach loop="$displayGroups" key="$displayGroupId" value="$displayGroup">
-						<xf:if is="{$fieldsGrouped.{$displayGroupId}} is not empty">
-							<tbody class="dataList-rowGroup">
-								<xf:datarow rowtype="subsection" rowclass="dataList-row--noHover">
-									<xf:cell colspan="2">{$displayGroup}</xf:cell>
-								</xf:datarow>
-								<xf:foreach loop="{$fieldsGrouped.{$displayGroupId}}" value="$field">
-									<xf:datarow
-										label="{$field.title|htmlspecialchars}"
-										href="{{ link($prefix . '/edit', $field) }}"
-										delete="{{ link($prefix . '/delete', $field) }}"
-										hash="{$field.field_id}">
-										<xf:hint>
-											{$fieldTypes.{$field.field_type}.label}
-										</xf:hint>
-									</xf:datarow>
-								</xf:foreach>
-							</tbody>
-						</xf:if>
-					</xf:foreach>
-				</xf:datalist>
-			</div>
-			<div class="block-footer">
-				<span class="block-footer-counter">{{ display_totals($displayGroups) }}</span>
-			</div>
-		</div>
-	</xf:form>
-<xf:else />
-	<div class="blockMessage">{{ phrase('no_items_have_been_created_yet') }}</div>
-</xf:if>]]></template>
+<xf:include template="base_custom_field_list" />]]></template>
   <template type="email" title="kieran_support_awaiting" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<mail:subject>
 {{ phrase('kieran_support_tickets_awaiting_subject') }}
 </mail:subject>
