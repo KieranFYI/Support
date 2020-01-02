@@ -3,6 +3,7 @@
 namespace Kieran\Support\ControllerPlugin;
 
 use XF\Mvc\Entity\Entity;
+use Kieran\Support\Service\Ticket\Creator;
 
 class Ticket extends \XF\ControllerPlugin\AbstractPlugin
 {
@@ -22,18 +23,19 @@ class Ticket extends \XF\ControllerPlugin\AbstractPlugin
 			$message = '';
 		} else if (!$message) {
 			throw $this->exception($this->error(\XF::phrase('please_enter_reason_for_ticketing_this_message')));
-		}
+        }
 
 		$creator = $this->service('Kieran\Support:Ticket\Creator', $type->type_id, $ticket_title);
 
-		$creator->setMessage($message);
+        $creator->setMessage($message);
+        $creator->setPriority($this->filter('priority', 'str'));
 
 		$creator->setAttachmentHash($this->filter('attachment_hash', 'str'));
 
 		return $creator;
 	}
 
-	protected function finalizeTicketCreate(\Kieran\Support\Service\Ticket\Creator $creator)
+	protected function finalizeTicketCreate(Creator $creator)
 	{
 
 		$creator->getTicket()->draft_reply->delete();
@@ -81,7 +83,7 @@ class Ticket extends \XF\ControllerPlugin\AbstractPlugin
 				$value = $value;
 			}
 		}
-		else
+        else
 		{
 			if (is_array($value))
 			{

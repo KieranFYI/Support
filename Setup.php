@@ -63,6 +63,7 @@ class Setup extends \XF\AddOn\AbstractSetup
 			$table->addColumn('ticket_title', 'varchar', 150);
 			$table->addColumn('status_id', 'varchar', 100);
 			$table->addColumn('state', 'enum', ['visible', 'locked', 'hidden', 'awaiting', 'closed', 'deleted'])->setDefault('visible');
+			$table->addColumn('priority', 'enum', ['Low', 'Medium', 'Normal', 'High', 'Urgent'])->setDefault('Normal');
 			$table->addColumn('assigned_user_id', 'int')->setDefault(0);
 			$table->addColumn('comment_count', 'int')->setDefault(0);
 			$table->addColumn('last_modified_date', 'int');
@@ -81,6 +82,7 @@ class Setup extends \XF\AddOn\AbstractSetup
 
 			$table->addColumn('hide_title', 'int', 1)->setDefault(0);
             $table->addColumn('hide_message', 'int', 1)->setDefault(0);
+            $table->addColumn('require_priority', 'int', 1)->setDefault(0);
             
 			$table->addPrimaryKey('type_id');
 			$table->addKey(['type_id'], 'type_id');
@@ -96,6 +98,7 @@ class Setup extends \XF\AddOn\AbstractSetup
 			$table->addColumn('ip_id', 'int')->setDefault(0);
 			$table->addColumn('comment_date', 'int');
 			$table->addColumn('status_change', 'varchar', 100);
+			$table->addColumn('priority_change', 'enum', ['Low', 'Medium', 'Normal', 'High', 'Urgent'])->nullable();
 			$table->addColumn('assigned_user_id', 'int')->setDefault(0);
 			$table->addColumn('is_ticket', 'tinyint', 3);
 			$table->addColumn('attach_count', 'smallint', 5)->setDefault(0);

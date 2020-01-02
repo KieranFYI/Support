@@ -56,13 +56,16 @@ class Creator extends \XF\Service\AbstractService
         $this->ticket->user_id = $user->user_id;
 
 		$this->ticket->last_modified_date = $time;
-		$this->ticket->last_modified_user_id = $user->user_id;
+        $this->ticket->last_modified_user_id = $user->user_id;
+        
 		if ($this->ticket->status_id != 'assigned')
 		{
 			$this->ticket->status_id = 'new';
 			$this->ticket->state = 'visible';
 			$this->comment->status_change = 'new';
-		}
+        }
+        
+		$this->ticket->priority = 'Normal';
 
 		$this->commentPreparer->setUser($user);
 	}
@@ -84,6 +87,12 @@ class Creator extends \XF\Service\AbstractService
 	public function setMessage($message, $format = true)
 	{
 		return $this->commentPreparer->setMessage($message, $format);
+	}
+
+	public function setPriority($priority)
+	{
+        $this->ticket->priority = $priority;
+		$this->commentPreparer->setPriority($priority);
 	}
 
 	public function getTicket() {

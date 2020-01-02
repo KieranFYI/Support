@@ -20,6 +20,7 @@ class Types extends \XF\Admin\Controller\AbstractController
 			'success' => $this->filter('success', 'bool'),
 			'fields' => $this->getTicketFieldRepo()->findFieldsForList()->fetch(),
 			'allStatus' => $this->getStatusRepo()->getAll(),
+			'allPriorities' => ['Low', 'Medium', 'Normal', 'High', 'Urgent'],
 		];
 		return $this->view('Kieran\Support:Types\Add', 'kieran_support_types_edit', $viewParams);
 	}
@@ -87,7 +88,8 @@ class Types extends \XF\Admin\Controller\AbstractController
 				'name' => 'str',
                 'description' => 'str',	
                 'hide_title' => 'uint',	
-                'hide_message' => 'uint'
+                'hide_message' => 'uint',
+                'require_priority' => 'uint',
 			],
 			'fields' => 'array',
 			'status' => 'array'

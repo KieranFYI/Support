@@ -251,7 +251,8 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 					'view' => 'Kieran\Support:Ticket\Ticket',
 					'template' => 'kieran_support_ticket_create',
 					'extraViewParams' => [
-						'type' => $type,
+                        'type' => $type,
+                        'priorities' => ['Low', 'Medium', 'Normal', 'High', 'Urgent'],
 						'canManage' => $this->getTicketTypeRepo()->canManage(),
 						'canCreate' => $this->getTicketTypeRepo()->canCreate(),
 						'canManageArticles' => \XF::visitor()->hasPermission('support', 'articles_can_manage'),
@@ -312,7 +313,7 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 			}
 
 			$commentPlugin = $this->plugin('Kieran\Support:TicketComment');
-			return $commentPlugin->actionTicketComment($ticket, $status, $assigned_user_id);
+			return $commentPlugin->actionTicketComment($ticket, $status, null, $assigned_user_id);
 		}
 		else
 		{
@@ -463,6 +464,7 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 				'filters' => $filters,
 				'starterFilter' => $starterFilter,
 				'allStatus' => $this->getStatusRepo()->getAll(true, false),
+                'allPriorities' => ['Low', 'Medium', 'Normal', 'High', 'Urgent'],
 				'types' => $this->getTicketTypeRepo()->getAll(),
 			];
 
@@ -486,6 +488,7 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 			'direction' => 'str',
 			'date' => 'array',
 			'status' => 'array',
+			'priority' => 'array',
 			'type' => 'array',
 		]);
 
@@ -533,6 +536,10 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 			$filters['status'] = array_intersect($valid, $input['status']);
 		}
 
+		if (isset($input['priority'])) {
+			$filters['priority'] = array_intersect(['Low', 'Medium', 'Normal', 'High', 'Urgent'], $input['priority']);
+		}
+
 		if (isset($input['type']) && count($input['type'])) {
 			$valid = [];
 			$types = $this->getTicketTypeRepo()->getAll();
@@ -544,8 +551,8 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 
 		if (count($filters)) {
 			$filters['state'] = ['locked', 'visible', 'hidden', 'awaiting', 'closed'];
-		}
-
+        }
+        
 		return $filters;
 	}
 

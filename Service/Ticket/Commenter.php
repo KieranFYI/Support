@@ -83,6 +83,13 @@ class Commenter extends \XF\Service\AbstractService
 		}
 	}
 
+	public function setTicketPriority($priority = null)
+	{
+        $this->ticket->priority = $priority;
+
+        $this->comment->priority_change = $priority;
+	}
+
 	public function setTicketAssignedTo($assigned_user_id = 0)
 	{
 		$this->ticket->assigned_user_id = $assigned_user_id;

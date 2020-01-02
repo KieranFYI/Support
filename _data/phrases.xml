@@ -30,6 +30,7 @@
   <phrase title="kieran_support_ticket_disable_title" version_id="1000031" version_string="1.0.0 Beta"><![CDATA[Disable User Title]]></phrase>
   <phrase title="kieran_support_ticket_fields" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Fields]]></phrase>
   <phrase title="kieran_support_ticket_name" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Name]]></phrase>
+  <phrase title="kieran_support_ticket_require_priority" version_id="1000031" version_string="1.0.0 Beta"><![CDATA[Require Priority]]></phrase>
   <phrase title="kieran_support_ticket_status_assigned_message" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Your ticket is being processed.]]></phrase>
   <phrase title="kieran_support_ticket_status_awaiting_message" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Your ticket requires your response before we can proceed, if we do not hear from you then the ticket will automatically expire.]]></phrase>
   <phrase title="kieran_support_ticket_status_id" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Status ID]]></phrase>
@@ -61,6 +62,8 @@
   <phrase title="permission.support_articles_can_manage" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[Can manage articles]]></phrase>
   <phrase title="permission_interface.supportTicket" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Support permissions]]></phrase>
   <phrase title="please_enter_reason_for_ticketing_this_message" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[Please enter a Title/Message for this ticket]]></phrase>
+  <phrase title="priority" version_id="1000031" version_string="1.0.0 Beta"><![CDATA[Priority]]></phrase>
+  <phrase title="priority_changed" version_id="1000031" version_string="1.0.0 Beta"><![CDATA[Priority Changed]]></phrase>
   <phrase title="status_cannot_be_deleted_associated_with_ticket_explain" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[This status cannot be deleted as it is associated with a ticket. If you do not wish to use this, please disable it instead.]]></phrase>
   <phrase title="this_is_first_comment_in_ticket" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[This is the first comment in the ticket. Deleting it will delete the whole ticket.]]></phrase>
   <phrase title="ticket_message" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[Tickets]]></phrase>

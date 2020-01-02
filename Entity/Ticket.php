@@ -154,6 +154,9 @@ class Ticket extends Entity
 			'status_id' =>  ['type' => self::STR, 'default' => 'new'],
 			'state' =>  ['type' => self::STR, 'default' => 'visible',
 				'allowedValues' => ['visible', 'hidden', 'deleted','locked', 'awaiting', 'closed', 'deleted']
+            ],
+            'priority' =>  ['type' => self::STR, 'default' => 'Normal',
+				'allowedValues' => ['Low', 'Medium', 'Normal', 'High', 'Urgent']
 			],
 			'assigned_user_id' => ['type' => self::UINT, 'default' => 0],
 			'comment_count' => ['type' => self::UINT, 'forced' => true, 'default' => 0],

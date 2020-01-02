@@ -19,6 +19,7 @@ class TicketComment extends Entity
 	{
 		return (
 			$this->status_change ||
+			$this->priority_change ||
 			$this->attachmentHash ||
 			$this->message ||
 			$this->Ticket->isChanged('assigned_user_id')
@@ -96,6 +97,9 @@ class TicketComment extends Entity
 			],
 			'comment_date' => ['type' => self::UINT, 'default' => \XF::$time],
 			'status_change' =>  ['type' => self::STR, 'default' => ''],
+            'priority_change' =>  ['type' => self::STR, 'default' => null, 'nullable' => true,
+                'allowedValues' => ['Low', 'Medium', 'Normal', 'High', 'Urgent']
+            ],
 			'assigned_user_id' => ['type' => self::UINT, 'default' => 0],
 			'is_ticket' => ['type' => self::BOOL, 'default' => false],
 			'attach_count' => ['type' => self::UINT, 'max' => 65535, 'forced' => true, 'default' => 0],

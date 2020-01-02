@@ -68,6 +68,11 @@ class CommentPreparer extends \XF\Service\AbstractService
         return $preparer->pushEntityErrorIfInvalid($this->comment);
     }
 
+    public function setPriority($priority)
+    {
+        $this->comment->priority_change = $priority;
+    }
+
     /**
      * @param bool $format
      *

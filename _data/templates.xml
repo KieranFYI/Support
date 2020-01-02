@@ -155,6 +155,10 @@
 			<xf:checkboxrow label="{{ phrase('kieran_support_ticket_disable_message') }}">
 				<xf:option name="type[hide_message]" selected="$type.hide_message" value="1" />
 			</xf:checkboxrow>
+			
+			<xf:checkboxrow label="{{ phrase('kieran_support_ticket_require_priority') }}">
+				<xf:option name="type[require_priority]" selected="$type.require_priority" value="1" />
+			</xf:checkboxrow>
 		</div>
 
 		<h3 class="block-formSectionHeader">
@@ -512,7 +516,7 @@
 		<xf:submitrow icon="delete" />
 	</div>
 </xf:form>]]></template>
-  <template type="public" title="kieran_support_filters" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:form action="{{ link('support/tickets/filters') }}">
+  <template type="public" title="kieran_support_filters" version_id="1000031" version_string="1.0.0 Beta"><![CDATA[<xf:form action="{{ link('support/tickets/filters') }}">
 	<!--[XF:above_started_by]-->
 	<div class="menu-row menu-row--separated">
 		{{ phrase('started_by:') }}
@@ -527,6 +531,15 @@
 		<xf:select name="status[]" size="2" multiple="multiple">
 			<xf:foreach loop="$allStatus" value="$status">
 				<xf:option value="{$status.status_id}">{{ $status.name }}</xf:option>
+			</xf:foreach>
+		</xf:select>
+	</div>
+
+	<div class="menu-row menu-row--separated">
+		{{ phrase('priority:') }}
+		<xf:select name="priority[]" size="2" multiple="multiple">
+			<xf:foreach loop="$allPriorities" value="$priority">
+				<xf:option value="{$priority}">{{ $priority }}</xf:option>
 			</xf:foreach>
 		</xf:select>
 	</div>
@@ -627,6 +640,14 @@
 				<xf:hiddenval name="type">{{ $type.type_id }}</xf:hiddenval>
 				<xf:if is="!$type.hide_title">
 					<xf:textboxrow name="ticket_title" label="Ticket title" textbox-class="input--title" autofocus="autofocus" maxlength="{{ max_length('Kieran\Support:Ticket', 'ticket_title') }}" />
+				</xf:if>
+				
+				<xf:if is="$type.require_priority">
+					<xf:selectrow label="{{ phrase('priority') }}" name="priority">
+						<xf:foreach loop="$priorities" value="$priority">
+							<xf:option value="{$priority}" selected="$priority == 'Normal'">{{ $priority }}</xf:option>
+						</xf:foreach>
+					</xf:selectrow>
 				</xf:if>
 				
 				<xf:macro template="kieran_support_ticket_create_macro" name="fields" arg-set="{$type.fields}" />
@@ -1008,7 +1029,7 @@
 		<xf:submitrow submit="{{ phrase('update') }}" />
 	</div>
 </xf:form>]]></template>
-  <template type="public" title="kieran_support_tickets" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:title>My tickets</xf:title>
+  <template type="public" title="kieran_support_tickets" version_id="1000031" version_string="1.0.0 Beta"><![CDATA[<xf:title>My tickets</xf:title>
 <xf:description>View, update and track your tickets.</xf:description>
 <xf:wrap template="kieran_support_wrapper">
 	<xf:set var="$pageSelected" value="tickets" />
@@ -1020,6 +1041,7 @@
 			<xf:datalist data-xf-init="responsive-data-list">
 				<xf:datarow rowtype="header">
 					<xf:cell>Status</xf:cell>
+					<xf:cell>Priority</xf:cell>
 					<xf:cell>Title</xf:cell>
 					<xf:cell>Created</xf:cell>
 					<xf:cell>Last updated</xf:cell>
@@ -1031,6 +1053,11 @@
 								<xf:cell class="dataList-cell--min" href="{{ link('support/tickets', $ticket) }}">
 									<span>
 										<span class="smilieText">{$ticket.status.name}</span>
+									</span>
+								</xf:cell>
+								<xf:cell class="dataList-cell--min" href="{{ link('support/tickets', $ticket) }}">
+									<span>
+										<span class="smilieText">{$ticket.priority}</span>
 									</span>
 								</xf:cell>
 								<xf:main label="{$ticket.ticket_title}" href="{{ link('support/tickets', $ticket) }}" hint="#{$ticket.ticket_id}" />
@@ -1058,7 +1085,7 @@
 		</div>
 	</div>
 </div>]]></template>
-  <template type="public" title="kieran_support_tickets_manage" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:if is="$assigned">
+  <template type="public" title="kieran_support_tickets_manage" version_id="1000031" version_string="1.0.0 Beta"><![CDATA[<xf:if is="$assigned">
 	<xf:title>Assigned tickets</xf:title>
 	<xf:description>View, update and track all your assigned tickets.</xf:description>
 	<xf:set var="$pageSelected" value="assigned" />
@@ -1069,8 +1096,8 @@
 </xf:if>
 <xf:wrap template="kieran_support_wrapper" />
 
-<xf:css src="kieran_support_tickets_manage.less" />
-<xf:css src="prefix_menu.less" />
+<xf:css src="kieran_support_tickets_manage.less"></xf:css>
+<xf:css src="prefix_menu.less"></xf:css>
 
 <div class="block">
 	<div class="block-outer">
@@ -1103,6 +1130,7 @@
 			<xf:datalist data-xf-init="responsive-data-list">
 				<xf:datarow rowtype="header">
 					<xf:cell>Status</xf:cell>
+					<xf:cell>Priority</xf:cell>
 					<xf:cell>Creator</xf:cell>
 					<xf:cell>Title</xf:cell>
 					<xf:cell>Last updated</xf:cell>
@@ -1117,6 +1145,11 @@
 								<xf:cell class="dataList-cell--min" href="{{ link('support/tickets', $ticket) }}">
 									<span>
 										<span class="smilieText">{$ticket.status.name}</span>
+									</span>
+								</xf:cell>
+								<xf:cell class="dataList-cell--min" href="{{ link('support/tickets', $ticket) }}">
+									<span>
+										<span class="smilieText">{$ticket.priority}</span>
 									</span>
 								</xf:cell>
 								<xf:cell class="contentRow"><xf:username user="$ticket.User" rich="true" /></xf:cell>
@@ -1277,7 +1310,7 @@
 		</div>
 	</div>
 </div>]]></template>
-  <template type="public" title="kieran_support_view_ticket" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{$ticket.ticket_title} #{$ticket.ticket_id}</xf:title>
+  <template type="public" title="kieran_support_view_ticket" version_id="1000031" version_string="1.0.0 Beta"><![CDATA[<xf:title>{$ticket.ticket_title} #{$ticket.ticket_id}</xf:title>
 <xf:h1>{$ticket.ticket_title} <span class="u-muted">#{$ticket.ticket_id}</span></xf:h1>
 
 <xf:wrap template="kieran_support_wrapper">
@@ -1290,7 +1323,7 @@
 	<xf:breadcrumb href="{{ link('support/tickets/manage') }}">{{ phrase('kieran_support_tickets_manage') }}</xf:breadcrumb>
 </xf:if>
 
-<xf:css src="kieran_support_view_ticket.less" />
+<xf:css src="kieran_support_view_ticket.less"></xf:css>
 
 <xf:description meta="false">
 	<ul class="listInline listInline--bullet">
@@ -1401,6 +1434,11 @@
 									<xf:if is="$comment.status_change">
 										<div class="message-minorHighlight">
 											{{ phrase('status_changed:') }} {$comment.status.name}
+										</div>
+									</xf:if>
+									<xf:if is="$comment.priority_change">
+										<div class="message-minorHighlight">
+											{{ phrase('priority_changed:') }} {$comment.priority_change}
 										</div>
 									</xf:if>
 

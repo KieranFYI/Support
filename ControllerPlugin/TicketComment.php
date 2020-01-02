@@ -3,11 +3,13 @@
 namespace Kieran\Support\ControllerPlugin;
 
 use XF\Mvc\Entity\Entity;
+use Kieran\Support\Entity\Ticket;
+use \Kieran\Support\Service\Ticket\Commenter;
 
 class TicketComment extends \XF\ControllerPlugin\AbstractPlugin
 {
 
-	protected function setupTicketComment(\Kieran\Support\Entity\Ticket $ticket, $status = null, $assigned_user_id = 0)
+	protected function setupTicketComment(Ticket $ticket, $status = null, $priority = null, $assigned_user_id = 0)
 	{
 		$message = $this->plugin('XF:Editor')->fromInput('message');
 
@@ -16,7 +18,11 @@ class TicketComment extends \XF\ControllerPlugin\AbstractPlugin
 		if ($message)
 		{
 			$commenter->setMessage($message);
-		}
+        }
+        
+        if ($priority) {
+            $commenter->setTicketPriority($priority);
+        }
 
 		if ($status)
 		{
@@ -41,7 +47,7 @@ class TicketComment extends \XF\ControllerPlugin\AbstractPlugin
 		return $commenter;
 	}
 
-	protected function finalizeTicketComment(\Kieran\Support\Service\Ticket\Commenter $commenter)
+	protected function finalizeTicketComment(Commenter $commenter)
 	{
 		$commenter->getTicket()->addWatcher($commenter->getComment()->user_id);
 		$commenter->getTicket()->notifyWatchers($commenter->getComment()->user_id);
@@ -64,9 +70,9 @@ class TicketComment extends \XF\ControllerPlugin\AbstractPlugin
 	
 	}
 
-	public function actionTicketComment(\Kieran\Support\Entity\Ticket $ticket, $status = null, $assigned_user_id = 0)
+	public function actionTicketComment(Ticket $ticket, $status = null, $priority = null, $assigned_user_id = 0)
 	{
-		$commenter = $this->setupTicketComment($ticket, $status, $assigned_user_id);
+		$commenter = $this->setupTicketComment($ticket, $status, $priority, $assigned_user_id);
 
 		if ($commenter->hasSaveableChanges())
 		{
@@ -86,7 +92,7 @@ class TicketComment extends \XF\ControllerPlugin\AbstractPlugin
 		}
 	}
 
-	public function actionLockUnlock(\Kieran\Support\Entity\Ticket $ticket)
+	public function actionLockUnlock(Ticket $ticket)
 	{
 
 		$commenter = $this->service('Kieran\Support:Ticket\Commenter', $ticket);
@@ -102,7 +108,7 @@ class TicketComment extends \XF\ControllerPlugin\AbstractPlugin
 		return $this->redirect($this->router()->buildLink('support/tickets', $ticket) . '#comment-' . $comment->ticket_comment_id);
 	}
 
-	public function actionSoftDelete(\Kieran\Support\Entity\Ticket $ticket, $reason)
+	public function actionSoftDelete(Ticket $ticket, $reason)
 	{
 
 		$commenter = $this->service('Kieran\Support:Ticket\Commenter', $ticket);
@@ -115,7 +121,7 @@ class TicketComment extends \XF\ControllerPlugin\AbstractPlugin
 		return $this->redirect($this->router()->buildLink('support/tickets', $ticket), \XF::phrase('kieran_support_ticket_hide'));
 	}
 
-	public function actionRestore(\Kieran\Support\Entity\Ticket $ticket)
+	public function actionRestore(Ticket $ticket)
 	{
 
 		$commenter = $this->service('Kieran\Support:Ticket\Commenter', $ticket);
@@ -127,7 +133,7 @@ class TicketComment extends \XF\ControllerPlugin\AbstractPlugin
 		return $this->redirect($this->router()->buildLink('support/tickets', $ticket), \XF::phrase('kieran_support_ticket_restore '));
 	}
 
-	public function actionHardDelete(\Kieran\Support\Entity\Ticket $ticket, $reason)
+	public function actionHardDelete(Ticket $ticket, $reason)
 	{
 
 		$commenter = $this->service('Kieran\Support:Ticket\Commenter', $ticket);

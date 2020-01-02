@@ -91,6 +91,11 @@ class Ticket extends Repository
 			$finder->where('status_id', $filters['status']);
 		}
 
+		if (isset($filters['priority']) && count($filters['priority']) > 0)
+		{
+			$finder->where('priority', $filters['priority']);
+		}
+
 		if (isset($filters['state']) && count($filters['state']) > 0) {
 			$finder->where('state', $filters['state']);
 		} else {

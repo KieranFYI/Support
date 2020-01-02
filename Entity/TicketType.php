@@ -174,7 +174,8 @@ class TicketType extends Entity
             'description' => ['type' => self::STR, 'default' => ''],
             'enabled' => ['type' => self::UINT, 'default' => 0],
             'hide_title' => ['type' => self::UINT, 'default' => 0],
-            'hide_message' => ['type' => self::UINT, 'default' => 0]
+            'hide_message' => ['type' => self::UINT, 'default' => 0],
+            'require_priority' => ['type' => self::UINT, 'default' => 0],
         ];
         $structure->getters = [
 			'draft_reply' => true,
