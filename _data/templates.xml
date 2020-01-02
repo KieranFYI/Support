@@ -151,6 +151,10 @@
 			<xf:checkboxrow label="{{ phrase('kieran_support_ticket_disable_title') }}">
 				<xf:option name="type[hide_title]" selected="$type.hide_title" value="1" />
 			</xf:checkboxrow>
+			
+			<xf:checkboxrow label="{{ phrase('kieran_support_ticket_disable_message') }}">
+				<xf:option name="type[hide_message]" selected="$type.hide_message" value="1" />
+			</xf:checkboxrow>
 		</div>
 
 		<h3 class="block-formSectionHeader">
@@ -627,25 +631,42 @@
 				
 				<xf:macro template="kieran_support_ticket_create_macro" name="fields" arg-set="{$type.fields}" />
 				
-				<xf:macro template="kieran_support_ticket_create_macro" name="body"
-						  arg-attachmentData="{$attachmentData}"
-						  arg-messageSelector=".js-message"
-						  arg-submitText="{{ phrase('kieran_support_ticket_create') }}"/>
-			
+				<xf:if is="$type.hide_message">
+					<dl class="formRow formRow--input">
+						<dt>
+							<div class="formRow-labelWrapper">
+							</div>
+						</dt>
+						<dd>
+							<div class="formButtonGroup">
+								<div class="formButtonGroup-primary">
+									<xf:button type="submit" class="button--primary">
+										{{ phrase('kieran_support_ticket_create') }}
+									</xf:button>
+								</div>
+							</div>
+						</dd>
+					</dl>
+					
+				<xf:else/>
+					<xf:macro template="kieran_support_ticket_create_macro" name="body"
+							  arg-attachmentData="{$attachmentData}"
+							  arg-submitText="{{ phrase('kieran_support_ticket_create') }}" />
+				</xf:if>
+				
 				<xf:hiddenval name="apply">1</xf:hiddenval>
 			</xf:form>
 		</div>
 	</div>
 </div>]]></template>
-  <template type="public" title="kieran_support_ticket_create_macro" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:macro name="body"
+  <template type="public" title="kieran_support_ticket_create_macro" version_id="1000031" version_string="1.0.0 Beta"><![CDATA[<xf:macro name="body"
 	arg-message=""
 	arg-attachmentData="{{ null }}"
 	arg-forceHash=""
-	arg-messageSelector=""
 	arg-submitText="">
 
-	<xf:js src="xf/message.js" min="1" />
-	<xf:css src="message.less" />
+	<xf:js src="xf/message.js" min="1"></xf:js>
+	<xf:css src="message.less"></xf:css>
 
 	<dl class="formRow formRow--input">
 		<dt>

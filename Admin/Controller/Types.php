@@ -86,7 +86,8 @@ class Types extends \XF\Admin\Controller\AbstractController
 				'enabled' => 'uint',
 				'name' => 'str',
                 'description' => 'str',	
-                'hide_title' => 'uint'
+                'hide_title' => 'uint',	
+                'hide_message' => 'uint'
 			],
 			'fields' => 'array',
 			'status' => 'array'
