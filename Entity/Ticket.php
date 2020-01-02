@@ -62,7 +62,7 @@ class Ticket extends Entity
 
 		foreach ($this->watchers as $watcher) {
 
-			if (!$watcher->hasPermission('support', $this->TicketType->permission_view)
+			if (!$watcher->hasPermission('support', 'view_' . $this->TicketType->type_id)
 				|| $current_user->user_id == $watcher->user_id) {
 				continue;
 			}
@@ -119,7 +119,7 @@ class Ticket extends Entity
 			$ticket_type = $this->TicketType;
 		}
 
-		return $this->getTicketRepo()->findUsersWithPermission('support', $ticket_type->permission_process, true);
+		return $this->getTicketRepo()->findUsersWithPermission('support', 'process_' . $ticket_type->type_id, true);
 	}
 
 	public function getNewComment()

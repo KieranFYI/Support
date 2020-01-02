@@ -3,6 +3,7 @@
 namespace Kieran\Support\Admin\Controller;
 
 use XF\Mvc\ParameterBag;
+use Kieran\Support\Entity\TicketType;
 
 class Types extends \XF\Admin\Controller\AbstractController
 {
@@ -12,7 +13,7 @@ class Types extends \XF\Admin\Controller\AbstractController
 		return $this->view('Kieran\Support:Types', 'kieran_support_types', ['types' => $this->getTicketTypeRepo()->getAll(false)]);
 	}
 
-	protected function typeAddEdit(\Kieran\Support\Entity\TicketType $type)
+	protected function typeAddEdit(TicketType $type)
 	{
 		$viewParams = [
 			'type' => $type,
@@ -75,7 +76,7 @@ class Types extends \XF\Admin\Controller\AbstractController
 		return $this->redirect($this->buildLink('support/types'));
 	}
 
-	protected function typeSaveProcess(\Kieran\Support\Entity\TicketType $type)
+	protected function typeSaveProcess(TicketType $type)
 	{
 
 		$form = $this->formAction();
@@ -86,27 +87,15 @@ class Types extends \XF\Admin\Controller\AbstractController
 				'name' => 'str',
 				'description' => 'str',	
 			],
-			'permission' => [
-				'create' => 'str',
-				'process' => 'str',
-				'view' => 'str',
-				'soft_delete' => 'str',
-				'hard_delete' => 'str',
-			],
 			'fields' => 'array',
 			'status' => 'array'
 		]);
 		
 		$form->basicEntitySave($type, $input['type']);
-		
-		$this->checkPermissions($form, $input['type']['name'], $input['permission']);
-		$perms = [];
-		foreach ($input['permission'] as $key => $value) {
-			$perms['permission_' . $key] = $value;
-		}
-
-		$form->basicEntitySave($type, $perms);
 		$form->run();
+		
+		$type->checkAndCreatePermissions($type);
+
 
 		$form = $this->formAction();
 		$fields = $this->getTicketFieldRepo()->findFieldsForList()->fetch();
@@ -149,48 +138,6 @@ class Types extends \XF\Admin\Controller\AbstractController
 		}
 
 		return $form;
-	}
-
-	protected function checkPermissions($form, $name, &$permissions) {
-		$encoded = strtolower(str_replace(' ', '_', hash('crc32b', $name)));
-		foreach ($permissions as $key => $value) {
-			if (strlen(trim($value)) <= 0) {
-				$permissions[$key] = $key . '_' . $encoded;
-			}
-		}
-		$size = (count($this->getTicketTypeRepo()->getAll(false)) * 5) + 1;
-		$idx = 0;
-		foreach ($permissions as $key => $perm) {
-
-			$permCheck = $this->em()->find('XF:Permission', [
-				'permission_group_id' => 'support',
-				'permission_id' => $perm
-			]);
-
-			if (!$permCheck) {
-				$permission = $this->em()->create('XF:Permission');
-				$input = [
-					'permission_id' => $perm,
-					'permission_group_id' => 'support',
-					'permission_type' => 'flag',
-					'interface_group_id' => 'supportTicket',
-					'display_order' => $size + $idx,
-					'depend_permission_id' => '',
-					'addon_id' => 'Kieran/Support'
-				];
-
-				$form->basicEntitySave($permission, $input);
-
-				$form->apply(function() use ($key, $name, $permission)
-				{
-					$title = $permission->getMasterPhrase();
-					$title->phrase_text = 'Can ' . str_replace('_', ' ', $key) . ' ticket type ' . $name;
-					$title->save();
-				});
-			}
-			$idx++;
-		}
-
 	}
 
 	protected function assertTypeExists($id, $with = null, $phraseKey = null)

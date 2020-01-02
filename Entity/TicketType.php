@@ -27,7 +27,7 @@ class TicketType extends Entity
 			return false;
 		}
 
-		return $visitor->hasPermission('support', $this->permission_view);
+		return $visitor->hasPermission('support', 'view_' . $this->type_id);
 	}
 
 	public function canCreate($error=null)
@@ -39,7 +39,7 @@ class TicketType extends Entity
 			return false;
 		}
 	
-		return $visitor->hasPermission('support', $this->permission_create);
+		return $visitor->hasPermission('support', 'create_' . $this->type_id);
 	}
 
 	public function canProcess()
@@ -51,7 +51,7 @@ class TicketType extends Entity
 			return false;
 		}
 	
-		return $visitor->hasPermission('support', $this->permission_process);
+		return $visitor->hasPermission('support', 'process_' . $this->type_id);
 	}
 
 	public function canDelete($delete_type = null)
@@ -68,26 +68,63 @@ class TicketType extends Entity
 			}
 			
 			if ($delete_type == 'soft') {
-				return $visitor->hasPermission('support', $this->permission_soft_delete);
+				return $visitor->hasPermission('support', 'soft_delete_' . $this->type_id);
 			} else if ($delete_type == 'hard') {
-				return $visitor->hasPermission('support', $this->permission_hard_delete);
+				return $visitor->hasPermission('support', 'hard_delete_' . $this->type_id);
 			} else {
 				return false;
 			}
 		}
 	}
 
+    public $PermissionTypes = [
+        'create',
+        'process',
+        'view',
+        'soft_delete',
+        'hard_delete'
+    ];
+
 	public function _preDelete() {
 
-		$types = ['create', 'process', 'view', 'soft_delete', 'hard_delete'];
-		foreach ($types as $perm) {
+		foreach ($this->PermissionTypes as $perm) {
 			$perm = $this->em()->find('XF:Permission', [
 				'permission_group_id' => 'support',
-				'permission_id' => $perm . '_' . strtolower(str_replace(' ', '_', $this->name))
-			]);
+				'permission_id' => $perm . '_' . $this->type_id
+            ]);
+            
 			if ($perm) {
 				$perm->delete();
 			}
+		}
+    }
+
+    public function checkAndCreatePermissions() {
+
+		foreach ($this->PermissionTypes as $key => $perm) {
+
+			$permCheck = $this->em()->find('XF:Permission', [
+				'permission_group_id' => 'support',
+                'permission_id' => $perm . '_' . $this->type_id,
+                'addon_id' => 'Kieran/Support'
+            ]);
+            
+			if (!$permCheck) {
+				$permission = $this->em()->create('XF:Permission');
+				$permission->permission_id = $perm . '_' . $this->type_id;
+				$permission->permission_group_id = 'support';
+				$permission->permission_type = 'flag';
+				$permission->interface_group_id = 'supportTicket';
+				$permission->depend_permission_id = '';
+				$permission->display_order = 100 + ($this->type_id * 10) + $key;
+				$permission->addon_id = 'Kieran/Support';
+                $permission->save();
+                
+                $title = $permission->getMasterPhrase();
+                $title->phrase_text = 'Can ' . str_replace('_', ' ', $perm) . ' ticket type ' . $this->name;
+                $title->save();
+            }
+            
 		}
 	}
 	
@@ -137,12 +174,7 @@ class TicketType extends Entity
             'description' => ['type' => self::STR, 'default' => ''],
             'enabled' => ['type' => self::UINT, 'default' => 0],
             'hide_title' => ['type' => self::UINT, 'default' => 0],
-            'hide_message' => ['type' => self::UINT, 'default' => 0],
-            'permission_create' => ['type' => self::STR, 'default' => ''],
-            'permission_process' => ['type' => self::STR, 'default' => ''],
-            'permission_view' => ['type' => self::STR, 'default' => ''],
-            'permission_soft_delete' => ['type' => self::STR, 'default' => ''],
-            'permission_hard_delete' => ['type' => self::STR, 'default' => ''],
+            'hide_message' => ['type' => self::UINT, 'default' => 0]
         ];
         $structure->getters = [
 			'draft_reply' => true,

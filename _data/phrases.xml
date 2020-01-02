@@ -28,11 +28,6 @@
   <phrase title="kieran_support_ticket_create_ticket" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Ticket]]></phrase>
   <phrase title="kieran_support_ticket_fields" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Fields]]></phrase>
   <phrase title="kieran_support_ticket_name" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Name]]></phrase>
-  <phrase title="kieran_support_ticket_permission_create" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Create]]></phrase>
-  <phrase title="kieran_support_ticket_permission_delete_hard" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Hard delete]]></phrase>
-  <phrase title="kieran_support_ticket_permission_delete_soft" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Soft delete]]></phrase>
-  <phrase title="kieran_support_ticket_permission_process" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Process permission]]></phrase>
-  <phrase title="kieran_support_ticket_permission_view" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[View permission]]></phrase>
   <phrase title="kieran_support_ticket_status_assigned_message" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Your ticket is being processed.]]></phrase>
   <phrase title="kieran_support_ticket_status_awaiting_message" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Your ticket requires your response before we can proceed, if we do not hear from you then the ticket will automatically expire.]]></phrase>
   <phrase title="kieran_support_ticket_status_id" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Status ID]]></phrase>

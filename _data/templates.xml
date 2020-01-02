@@ -91,29 +91,33 @@
 		<xf:submitrow icon="save" sticky="true" />
 	</xf:form>
 </div>]]></template>
-  <template type="admin" title="kieran_support_types" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('kieran_support_ticket_types') }}</xf:title>
+  <template type="admin" title="kieran_support_types" version_id="1000031" version_string="1.0.0 Beta"><![CDATA[<xf:title>{{ phrase('kieran_support_ticket_types') }}</xf:title>
 
 <xf:pageaction>
 	<xf:button href="{{ link('support/types/add') }}" icon="add">{{ phrase('kieran_support_ticket_types_add') }}</xf:button>
 </xf:pageaction>
 
-<xf:form action="{{ link('support/types/toggle') }}" class="block" ajax="true">
-	<div class="block-container">
-		<div class="block-body">
-			<xf:datalist>
-				<xf:foreach loop="$types" value="$type">
-					<xf:datarow rowtype="subsection">
-						<xf:cell href="{{ link('support/types/edit', $type) }}">{$type.name}</xf:cell>
-						<xf:toggle name="enabled[{$type.type_id}]" selected="$type.enabled"
-							class="dataList-cell--separated" submit="true"
-							tooltip="{{ phrase('enable_disable_x', {'title': $type.name}) }}" />
-						<xf:delete href="{{link('support/types/delete', $type)}}" />
-					</xf:datarow>
-				</xf:foreach>
-			</xf:datalist>
+<xf:if is="$types is not empty">
+	<xf:form action="{{ link('support/types/toggle') }}" class="block" ajax="true">
+		<div class="block-container">
+			<div class="block-body">
+				<xf:datalist>
+					<xf:foreach loop="$types" value="$type">
+						<xf:datarow rowtype="subsection">
+							<xf:cell href="{{ link('support/types/edit', $type) }}">{$type.name}</xf:cell>
+							<xf:toggle name="enabled[{$type.type_id}]" selected="$type.enabled"
+								class="dataList-cell--separated" submit="true"
+								tooltip="{{ phrase('enable_disable_x', {'title': $type.name}) }}" />
+							<xf:delete href="{{link('support/types/delete', $type)}}" />
+						</xf:datarow>
+					</xf:foreach>
+				</xf:datalist>
+			</div>
 		</div>
-	</div>
-</xf:form>]]></template>
+	</xf:form>
+<xf:else />
+	<div class="blockMessage">{{ phrase('no_items_have_been_created_yet') }}</div>
+</xf:if>]]></template>
   <template type="admin" title="kieran_support_types_edit" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:if is="$type.isInsert()">
 	<xf:title>{{ phrase('kieran_support_ticket_types_add') }}</xf:title>
 <xf:else />
@@ -144,36 +148,6 @@
 			<xf:textarearow name="type[description]" value="{$type.description}" autosize="true"
 				label="{{ phrase('description') }}" />
 		</div>
-
-		<xf:if is="!$type.isInsert()">
-			<h3 class="block-formSectionHeader">
-				<span class="collapseTrigger collapseTrigger--block" data-xf-click="toggle" data-target="< :up:next">
-					<span class="block-formSectionHeader-aligner">{{ phrase('permissions') }}</span>
-				</span>
-			</h3>
-			<div class="block-body block-body--collapsible">
-
-				<xf:textboxrow name="permission[create]" value="{$type.permission_create}"
-					maxlength="{{ max_length($type, 'permission_create') }}"
-					label="{{ phrase('kieran_support_ticket_permission_create') }}" />
-
-				<xf:textboxrow name="permission[view]" value="{$type.permission_view}"
-					maxlength="{{ max_length($type, 'permission_view') }}"
-					label="{{ phrase('kieran_support_ticket_permission_view') }}" />
-
-				<xf:textboxrow name="permission[process]" value="{$type.permission_process}"
-					maxlength="{{ max_length($type, 'permission_process') }}"
-					label="{{ phrase('kieran_support_ticket_permission_process') }}" />
-
-				<xf:textboxrow name="permission[delete_soft]" value="{$type.permission_soft_delete}"
-					maxlength="{{ max_length($type, 'permission_soft_delete') }}"
-					label="{{ phrase('kieran_support_ticket_permission_delete_soft') }}" />
-
-				<xf:textboxrow name="permission[delete_hard]" value="{$type.permission_hard_delete}"
-					maxlength="{{ max_length($type, 'permission_hard_delete') }}"
-					label="{{ phrase('kieran_support_ticket_permission_delete_hard') }}" />
-			</div>
-		</xf:if>
 
 		<h3 class="block-formSectionHeader">
 			<span class="collapseTrigger collapseTrigger--block" data-xf-click="toggle" data-target="< :up:next">

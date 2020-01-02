@@ -80,14 +80,8 @@ class Setup extends \XF\AddOn\AbstractSetup
 			$table->addColumn('enabled', 'int', 1)->setDefault(0);
 
 			$table->addColumn('hide_title', 'int', 1)->setDefault(0);
-			$table->addColumn('hide_message', 'int', 1)->setDefault(0);
-
-			$table->addColumn('permission_create', 'varchar', 150);
-			$table->addColumn('permission_process', 'varchar', 150);
-			$table->addColumn('permission_view', 'varchar', 150);
-			$table->addColumn('permission_soft_delete', 'varchar', 150);
-			$table->addColumn('permission_hard_delete', 'varchar', 150);
-			
+            $table->addColumn('hide_message', 'int', 1)->setDefault(0);
+            
 			$table->addPrimaryKey('type_id');
 			$table->addKey(['type_id'], 'type_id');
 		});
