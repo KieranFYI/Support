@@ -118,7 +118,7 @@
 <xf:else />
 	<div class="blockMessage">{{ phrase('no_items_have_been_created_yet') }}</div>
 </xf:if>]]></template>
-  <template type="admin" title="kieran_support_types_edit" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:if is="$type.isInsert()">
+  <template type="admin" title="kieran_support_types_edit" version_id="1000031" version_string="1.0.0 Beta"><![CDATA[<xf:if is="$type.isInsert()">
 	<xf:title>{{ phrase('kieran_support_ticket_types_add') }}</xf:title>
 <xf:else />
 	<xf:title>{{ phrase('kieran_support_ticket_types_edit:') }} {$type.name}</xf:title>
@@ -147,6 +147,10 @@
 
 			<xf:textarearow name="type[description]" value="{$type.description}" autosize="true"
 				label="{{ phrase('description') }}" />
+			
+			<xf:checkboxrow label="{{ phrase('kieran_support_ticket_disable_title') }}">
+				<xf:option name="type[hide_title]" selected="$type.hide_title" value="1" />
+			</xf:checkboxrow>
 		</div>
 
 		<h3 class="block-formSectionHeader">
@@ -609,7 +613,7 @@
 		<xf:submitrow submit="{{ phrase('kieran_support_assign_ticket') }}" />
 	</div>
 </xf:form>]]></template>
-  <template type="public" title="kieran_support_ticket_create" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ $type.name }}</xf:title>
+  <template type="public" title="kieran_support_ticket_create" version_id="1000031" version_string="1.0.0 Beta"><![CDATA[<xf:title>{{ $type.name }}</xf:title>
 <xf:description>Fill in the form below to create a ticket.</xf:description>
 
 <div class="block">
@@ -617,8 +621,10 @@
 		<div class="block-body">
 			<xf:form action="{{ link('support/tickets/create') }}" ajax="true">
 				<xf:hiddenval name="type">{{ $type.type_id }}</xf:hiddenval>
-				<xf:textboxrow name="ticket_title" label="Ticket title" textbox-class="input--title" autofocus="autofocus" maxlength="{{ max_length('Kieran\Support:Ticket', 'ticket_title') }}" />
-
+				<xf:if is="!$type.hide_title">
+					<xf:textboxrow name="ticket_title" label="Ticket title" textbox-class="input--title" autofocus="autofocus" maxlength="{{ max_length('Kieran\Support:Ticket', 'ticket_title') }}" />
+				</xf:if>
+				
 				<xf:macro template="kieran_support_ticket_create_macro" name="fields" arg-set="{$type.fields}" />
 				
 				<xf:macro template="kieran_support_ticket_create_macro" name="body"

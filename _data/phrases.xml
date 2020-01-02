@@ -26,6 +26,7 @@
   <phrase title="kieran_support_ticket_create_appeal" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Ban Appeal]]></phrase>
   <phrase title="kieran_support_ticket_create_application" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Application]]></phrase>
   <phrase title="kieran_support_ticket_create_ticket" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Ticket]]></phrase>
+  <phrase title="kieran_support_ticket_disable_title" version_id="1000031" version_string="1.0.0 Beta"><![CDATA[Disable User Title]]></phrase>
   <phrase title="kieran_support_ticket_fields" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Fields]]></phrase>
   <phrase title="kieran_support_ticket_name" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Name]]></phrase>
   <phrase title="kieran_support_ticket_status_assigned_message" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Your ticket is being processed.]]></phrase>
