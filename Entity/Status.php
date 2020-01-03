@@ -13,11 +13,6 @@ class Status extends Entity
 		return !$this->getRelationOrDefault('Tickets', false)->count();
 	}
 
-	public function canSet()
-	{
-		return \XF::visitor()->hasPermission('support_status', $this->status_id);
-	}
-
 	public function isFieldSelected($field_id)
 	{
 		return isset($this->fields[$field_id]);

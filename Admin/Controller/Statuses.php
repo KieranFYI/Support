@@ -122,33 +122,6 @@ class Statuses extends \XF\Admin\Controller\AbstractController
 				$field->delete();
 			}
 		}
-
-		$permCheck = $this->em()->find('XF:Permission', [
-			'permission_group_id' => 'support_status',
-			'permission_id' => $status->status_id
-		]);
-
-		if (!$permCheck) {
-			$permission = $this->em()->create('XF:Permission');
-			$input = [
-				'permission_id' => $status->status_id,
-				'permission_group_id' => 'support_status',
-				'permission_type' => 'flag',
-				'interface_group_id' => 'support_status',
-				'display_order' => 1,
-				'depend_permission_id' => '',
-				'addon_id' => 'Kieran/Support'
-			];
-
-			$form->basicEntitySave($permission, $input);
-
-			$form->apply(function() use ($status, $permission)
-			{
-				$title = $permission->getMasterPhrase();
-				$title->phrase_text = 'Can set status to ' . $status->name;
-				$title->save();
-			});
-		}
 		
 		return $form;
 	}

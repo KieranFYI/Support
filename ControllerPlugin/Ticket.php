@@ -28,7 +28,10 @@ class Ticket extends \XF\ControllerPlugin\AbstractPlugin
 		$creator = $this->service('Kieran\Support:Ticket\Creator', $type->type_id, $ticket_title);
 
         $creator->setMessage($message);
-        $creator->setPriority($this->filter('priority', 'str'));
+
+        if ($type->require_priority) {
+            $creator->setPriority($this->filter('priority', 'str'));
+        }
 
 		$creator->setAttachmentHash($this->filter('attachment_hash', 'str'));
 

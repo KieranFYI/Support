@@ -17,6 +17,7 @@ class Ticket extends Repository
 			'title' => 'ticket_title',
 			'created' => 'ticket_date',
 			'last_updated' => 'last_modified_date',
+			'priority' => 'priority',
 		];
 	}
 
