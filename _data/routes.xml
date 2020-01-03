@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <routes>
   <route route_type="admin" route_prefix="support" controller="Kieran\Support:Support" context="support"/>
+  <route route_type="admin" route_prefix="support" sub_name="fields" format="fields/:str&lt;field_id&gt;" controller="Kieran\Support:TicketField" context="support"/>
   <route route_type="admin" route_prefix="support" sub_name="statuses" format="statuses/:str&lt;status_id&gt;" controller="Kieran\Support:Statuses" context="support"/>
   <route route_type="admin" route_prefix="support" sub_name="types" format="types/:int&lt;type_id&gt;" controller="Kieran\Support:Types" context="support"/>
-  <route route_type="admin" route_prefix="support-fields" format=":str&lt;field_id&gt;/" controller="Kieran\Support:TicketField" context="supportFields"/>
   <route route_type="public" route_prefix="support" format=":str&lt;topic_slug&gt;/:str&lt;article_slug&gt;/" controller="Kieran\Support:Support" context="support"/>
   <route route_type="public" route_prefix="support" sub_name="comments" format="comments/:int&lt;ticket_comment_id&gt;" controller="Kieran\Support:Comment" context="support"/>
   <route route_type="public" route_prefix="support" sub_name="manage/article" format="manage/article/:int&lt;article_id&gt;" controller="Kieran\Support:Article" context="support"/>

@@ -16,7 +16,7 @@ class TicketField extends AbstractField
 
 	protected function getLinkPrefix()
 	{
-		return 'support-fields';
+		return 'support/fields';
 	}
 
 	protected function getTemplatePrefix()
