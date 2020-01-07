@@ -8,6 +8,8 @@ use XF\Mvc\Entity\Repository;
 class Ticket extends Repository
 {
 
+	public static $Priority = ['Low', 'Medium', 'Normal', 'High', 'Urgent'];
+
 	public static function getAvailableSorts()
 	{
 		return [

@@ -4,6 +4,7 @@ namespace Kieran\Support\Entity;
 
 use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure;
+use Kieran\Support\Repository\Ticket as TicketRepo;
 
 class Ticket extends Entity
 {
@@ -156,7 +157,7 @@ class Ticket extends Entity
 				'allowedValues' => ['visible', 'hidden', 'deleted','locked', 'awaiting', 'closed', 'deleted']
             ],
             'priority' =>  ['type' => self::STR, 'default' => 'Normal',
-				'allowedValues' => ['Low', 'Medium', 'Normal', 'High', 'Urgent']
+				'allowedValues' => TicketRepo::$Priority
 			],
 			'assigned_user_id' => ['type' => self::UINT, 'default' => 0],
 			'comment_count' => ['type' => self::UINT, 'forced' => true, 'default' => 0],
