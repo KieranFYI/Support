@@ -21,7 +21,7 @@ class Setup extends \XF\AddOn\AbstractSetup
 			$table->addColumn('title', 'varchar', 50);
 			$table->addColumn('description', 'text');
 			$table->addColumn('display_order', 'int')->setDefault(1);
-			$table->addColumn('view_power_required', 'int')->setDefault(0);
+			$table->addColumn('groups', 'varbinary', 255);
 			$table->addColumn('icon', 'varchar', 25)->comment('fontawesome icon class.');
 			
 			$table->addPrimaryKey('topic_id');
@@ -34,7 +34,7 @@ class Setup extends \XF\AddOn\AbstractSetup
 			$table->addColumn('title', 'varchar', 50);
 			$table->addColumn('description', 'text');
 			$table->addColumn('display_order', 'int')->setDefault(1);
-			$table->addColumn('view_power_required', 'int')->setDefault(0);
+			$table->addColumn('groups', 'varbinary', 255);
 
 			$table->addColumn('type', 'enum', ['bbcode', 'link'])->setDefault('bbcode');
 			$table->addColumn('message', ' mediumtext');

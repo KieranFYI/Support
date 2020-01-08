@@ -18,7 +18,7 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 		$tickets = $this->getTicketRepo()->findTicketsByUserId(\XF::visitor()->user_id);
 
 		$viewParams = [
-			'topics' => $this->getTopicRepo()->findTopics(0, \XF::visitor()->hasPermission('support', 'view_power')),
+			'topics' => $this->getTopicRepo()->findTopics(),
 			'tickets' => $tickets,
 			'canManage' => $this->getTicketTypeRepo()->canManage(),
 			'canCreate' => $this->getTicketTypeRepo()->canCreate(),
@@ -41,7 +41,7 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 			return $this->redirect($this->router()->buildLink('support'));
 		}
 
-		$topics = $this->getTopicRepo()->findTopics(0, \XF::visitor()->hasPermission('support', 'view_power'));
+		$topics = $this->getTopicRepo()->findTopics();
 
 		$filters = $this->getFilterInput();
 
@@ -82,7 +82,7 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 			return $this->redirect($this->router()->buildLink('support'));
 		}
 
-		$topics = $this->getTopicRepo()->findTopics(0, \XF::visitor()->hasPermission('support', 'view_power'));
+		$topics = $this->getTopicRepo()->findTopics();
 
 		$filters = $this->getFilterInput();
 		$filters['assigned_user_id'] = \XF::visitor()->user_id;
@@ -115,7 +115,7 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 
 	public function actionView(ParameterBag $params)
 	{
-		$topics = $this->getTopicRepo()->findTopics(0, \XF::visitor()->hasPermission('support', 'view_power'));
+		$topics = $this->getTopicRepo()->findTopics();
 
 		$ticket = $this->assertViewableTicket($params->ticket_id);
 		$messages = $ticket->getRelationOrDefault('Comments', false);

@@ -284,7 +284,7 @@
 		</div>
 	</div>
 </div>]]></template>
-  <template type="public" title="kieran_support_article_edit" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:if is="$article.isInsert()">
+  <template type="public" title="kieran_support_article_edit" version_id="1000170" version_string="1.0.1"><![CDATA[<xf:if is="$article.isInsert()">
 	<xf:title>Create Article</xf:title>
 	<xf:else />
 	<xf:title>Edit Topic: {$article.title}</xf:title>
@@ -312,8 +312,11 @@
 			<xf:numberboxrow name="display_order" value="{$article.display_order}" min="1"
 							 label="{{ phrase('display_order') }}" />
 
-			<xf:numberboxrow name="view_power_required" value="{$article.view_power_required}" min="1"
-							 label="{{ phrase('view_power_required') }}" />
+			<xf:checkboxrow name="groups" value="{$article.groups}"
+						listclass="listColumns"
+						label="{{ phrase('groups') }}">
+				<xf:options source="$userGroups" />
+			</xf:checkboxrow>
 			
 			<xf:checkboxrow label="{{ phrase('FAQ') }}">
 				<xf:option name="is_faq" selected="$article.is_faq" value="1" />
@@ -1245,7 +1248,7 @@
 		background-color: #afe2c4;
 	}
 }]]></template>
-  <template type="public" title="kieran_support_topic_edit" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:if is="$topic.isInsert()">
+  <template type="public" title="kieran_support_topic_edit" version_id="1000170" version_string="1.0.1"><![CDATA[<xf:if is="$topic.isInsert()">
 	<xf:title>Create Topic</xf:title>
 	<xf:else />
 	<xf:title>Edit Topic: {$topic.title}</xf:title>
@@ -1283,8 +1286,11 @@
 			<xf:numberboxrow name="display_order" value="{$topic.display_order}" min="1"
 							 label="{{ phrase('display_order') }}" />
 
-			<xf:numberboxrow name="view_power_required" value="{$topic.view_power_required}" min="1"
-							 label="{{ phrase('view_power_required') }}" />
+			<xf:checkboxrow name="groups" value="{$topic.groups}"
+						listclass="listColumns"
+						label="{{ phrase('groups') }}">
+				<xf:options source="$userGroups" />
+			</xf:checkboxrow>
 		</div>
 
 		<xf:submitrow icon="save" sticky="true" />
