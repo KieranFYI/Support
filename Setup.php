@@ -37,7 +37,7 @@ class Setup extends \XF\AddOn\AbstractSetup
 			$table->addColumn('groups', 'varbinary', 255);
 
 			$table->addColumn('type', 'enum', ['bbcode', 'link'])->setDefault('bbcode');
-			$table->addColumn('message', ' mediumtext');
+			$table->addColumn('message', 'mediumtext');
 
 			$table->addColumn('is_faq', 'tinyint');
 			$table->addColumn('callback_class', 'varchar', 255);

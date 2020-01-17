@@ -84,7 +84,7 @@ class Article extends \XF\Pub\Controller\AbstractController
 			$input['display_order'] = 1;
 		}
 
-		$input['message'] = $this->plugin('XF:Editor')->fromInput('message');
+		$input['message'] = $this->plugin('XF:Editor')->fromInput('message', 0);
 
 		$form = $this->formAction();
 		$form->basicEntitySave($article, $input);
