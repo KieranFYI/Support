@@ -10,3 +10,4 @@
 *.sw?
 
 _releases
+_output

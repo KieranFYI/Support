@@ -14,6 +14,7 @@ class Topic extends \XF\Pub\Controller\AbstractController
 		$viewParams = [
 			'topic' => $topic,
 			'topics' => $this->getTopicRepo()->findTopics(),
+			'userGroups' => $this->em()->getRepository('XF:UserGroup')->getUserGroupTitlePairs(),
 			'canManage' => $this->getTicketTypeRepo()->canManage(),
 			'canCreate' => $this->getTicketTypeRepo()->canCreate(),
 			'canManageArticles' => \XF::visitor()->hasPermission('support', 'articles_can_manage'),
@@ -23,21 +24,13 @@ class Topic extends \XF\Pub\Controller\AbstractController
 	}
 
 	public function actionEdit(ParameterBag $params)
-	{
-		if (!\XF::visitor()->hasPermission('support', 'articles_can_manage')) {
-			return $this->noPermission();
-		}
-		
+	{	
 		$topic = $this->assertViewableTopic($params->topic_id);
 		return $this->typeCreateEdit($topic);
 	}
 
 	public function actionDelete(ParameterBag $params)
 	{
-		if (!\XF::visitor()->hasPermission('support', 'articles_can_manage')) {
-			return $this->noPermission();
-		}
-		
 		$topic = $this->assertViewableTopic($params->topic_id);
 		$topic->display_order = 0;
 		$topic->save();
@@ -81,7 +74,7 @@ class Topic extends \XF\Pub\Controller\AbstractController
 			'description' => 'str',	
 			'icon' => 'str',
 			'display_order' => 'uint',
-			'view_power_required' => 'uint'
+			'groups' => 'array'
 		]);
 		if ($input['display_order'] < 1) {
 			$input['display_order'] = 1;
@@ -95,12 +88,18 @@ class Topic extends \XF\Pub\Controller\AbstractController
 	}
 
 	protected function assertViewableTopic($id, $with = null, $phraseKey = null) {
+		
+		if (!\XF::visitor()->hasPermission('support', 'articles_can_manage')) {
+			return $this->noPermission();
+		}
+
 		if (strpos($id, '-')) {
 			$id = substr($id, 0, strpos($id, '-'));
 		}
 
 		$topic = $this->assertRecordExists('Kieran\Support:Topic', $id, $with, $phraseKey);
-		if (\XF::visitor()->hasPermission('support', 'view_power') < $topic->view_power_required || $topic->display_order < 1) {
+
+		if ($topic->display_order < 1) {
 			throw $this->exception($this->notFound(\XF::phrase('requested_page_not_found')));
 		}
 		return $topic;

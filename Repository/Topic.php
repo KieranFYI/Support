@@ -2,26 +2,41 @@
 
 namespace Kieran\Support\Repository;
 
+use XF;
 use XF\Mvc\Entity\Finder;
 use XF\Mvc\Entity\Repository;
 
 class Topic extends Repository
 {
-    public function findTopic($slug)
+    public function findTopics($parent = 0, $ignorePerms = false)
     {
-        return $this->finder('Kieran\Support:Topic')
-            ->where('slug', $slug)
-			->where('display_order', '!=', 0)
-            ->fetchOne();
-    }
-
-    public function findTopics($parent = 0, $viewpower = 0)
-    {
-        return $this->finder('Kieran\Support:Topic')
+        $finder = $this->finder('Kieran\Support:Topic')
             ->order('display_order', 'ASC')
             ->where('parent_topic_id', $parent)
-            ->where('view_power_required', '<=', $viewpower)
-			->where('display_order', '!=', 0)
-            ->fetch();
+            ->where('display_order', '!=', 0);
+            
+        if (!$ignorePerms) {
+            $finder = $this->filterGroups($finder);
+        }
+        
+        return $finder->fetch();
+    }
+
+    private function filterGroups(Finder $finder) {
+
+        $values = array_merge(XF::visitor()->secondary_group_ids, [XF::visitor()->user_group_id]);
+
+        $columnName = $finder->columnSqlName('groups');
+        $parts = [];
+        foreach ($values AS $part)
+        {
+            $parts[] = 'FIND_IN_SET(' . $finder->quote($part) . ', '. $columnName . ')';
+        }
+        if ($parts)
+        {
+            $finder->whereSql(implode(' OR ', $parts));
+        }
+
+        return $finder;
     }
 }

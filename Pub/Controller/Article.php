@@ -13,6 +13,7 @@ class Article extends \XF\Pub\Controller\AbstractController
 		$viewParams = [
 			'article' => $article,
 			'topics' => $this->getTopicRepo()->findTopics(),
+			'userGroups' => $this->em()->getRepository('XF:UserGroup')->getUserGroupTitlePairs(),
 			'canManage' => $this->getTicketTypeRepo()->canManage(),
 			'canManageArticles' => \XF::visitor()->hasPermission('support', 'articles_can_manage'),
 		];
@@ -22,9 +23,6 @@ class Article extends \XF\Pub\Controller\AbstractController
 
 	public function actionEdit(ParameterBag $params)
 	{
-		if (!\XF::visitor()->hasPermission('support', 'articles_can_manage')) {
-			return $this->noPermission();
-		}
 		$article = $this->assertViewableArticle($params->article_id);
 		return $this->articleCreateEdit($article);
 	}
@@ -47,10 +45,6 @@ class Article extends \XF\Pub\Controller\AbstractController
 
 	public function actionDelete(ParameterBag $params)
 	{
-		if (!\XF::visitor()->hasPermission('support', 'articles_can_manage')) {
-			return $this->noPermission();
-		}
-		
 		$article = $this->assertViewableArticle($params->article_id);
 		$article->display_order = 0;
 		$article->save();
@@ -78,7 +72,7 @@ class Article extends \XF\Pub\Controller\AbstractController
 			'topic_id' => 'uint',
 			'description' => 'str',	
 			'display_order' => 'uint',
-			'view_power_required' => 'uint',
+			'groups' => 'array',
 			'type' => 'str',
 			'is_faq' => 'bool',
 			
@@ -103,9 +97,13 @@ class Article extends \XF\Pub\Controller\AbstractController
 		if (strpos($id, '-')) {
 			$id = substr($id, 0, strpos($id, '-'));
 		}
+		
+		if (!\XF::visitor()->hasPermission('support', 'articles_can_manage')) {
+			return $this->noPermission();
+		}
 
 		$article = $this->assertRecordExists('Kieran\Support:Article', $id, $with, $phraseKey);
-		if (\XF::visitor()->hasPermission('support', 'view_power') < $article->view_power_required || $article->display_order < 1) {
+		if ($article->display_order < 1) {
 			throw $this->exception($this->notFound(\XF::phrase('requested_page_not_found')));
 		}
 		return $article;
@@ -115,9 +113,13 @@ class Article extends \XF\Pub\Controller\AbstractController
 		if (strpos($id, '-')) {
 			$id = substr($id, 0, strpos($id, '-'));
 		}
+		
+		if (!\XF::visitor()->hasPermission('support', 'articles_can_manage')) {
+			return $this->noPermission();
+		}
 
 		$topic = $this->assertRecordExists('Kieran\Support:Topic', $id, $with, $phraseKey);
-		if (\XF::visitor()->hasPermission('support', 'view_power') < $topic->view_power_required || $topic->display_order < 1) {
+		if ($topic->display_order < 1) {
 			throw $this->exception($this->notFound(\XF::phrase('requested_page_not_found')));
 		}
 		return $topic;

@@ -4,6 +4,7 @@ namespace Kieran\Support\Entity;
 	
 use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure;
+use Kieran\Support\Repository\Ticket;
 
 class TicketComment extends Entity
 {
@@ -98,7 +99,7 @@ class TicketComment extends Entity
 			'comment_date' => ['type' => self::UINT, 'default' => \XF::$time],
 			'status_change' =>  ['type' => self::STR, 'default' => ''],
             'priority_change' =>  ['type' => self::STR, 'default' => null, 'nullable' => true,
-                'allowedValues' => ['Low', 'Medium', 'Normal', 'High', 'Urgent']
+                'allowedValues' => Ticket::$Priority
             ],
 			'assigned_user_id' => ['type' => self::UINT, 'default' => 0],
 			'is_ticket' => ['type' => self::BOOL, 'default' => false],

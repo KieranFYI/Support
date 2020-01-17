@@ -4,6 +4,7 @@ namespace Kieran\Support\Admin\Controller;
 
 use XF\Mvc\ParameterBag;
 use Kieran\Support\Entity\TicketType;
+use Kieran\Support\Repository\Ticket;
 
 class Types extends \XF\Admin\Controller\AbstractController
 {
@@ -20,7 +21,7 @@ class Types extends \XF\Admin\Controller\AbstractController
 			'success' => $this->filter('success', 'bool'),
 			'fields' => $this->getTicketFieldRepo()->findFieldsForList()->fetch(),
 			'allStatus' => $this->getStatusRepo()->getAll(),
-			'allPriorities' => ['Low', 'Medium', 'Normal', 'High', 'Urgent'],
+			'allPriorities' => Ticket::$Priority,
 		];
 		return $this->view('Kieran\Support:Types\Add', 'kieran_support_types_edit', $viewParams);
 	}

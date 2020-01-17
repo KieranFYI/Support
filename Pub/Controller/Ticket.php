@@ -18,7 +18,7 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 		$tickets = $this->getTicketRepo()->findTicketsByUserId(\XF::visitor()->user_id);
 
 		$viewParams = [
-			'topics' => $this->getTopicRepo()->findTopics(0, \XF::visitor()->hasPermission('support', 'view_power')),
+			'topics' => $this->getTopicRepo()->findTopics(),
 			'tickets' => $tickets,
 			'canManage' => $this->getTicketTypeRepo()->canManage(),
 			'canCreate' => $this->getTicketTypeRepo()->canCreate(),
@@ -41,7 +41,7 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 			return $this->redirect($this->router()->buildLink('support'));
 		}
 
-		$topics = $this->getTopicRepo()->findTopics(0, \XF::visitor()->hasPermission('support', 'view_power'));
+		$topics = $this->getTopicRepo()->findTopics();
 
 		$filters = $this->getFilterInput();
 
@@ -82,7 +82,7 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 			return $this->redirect($this->router()->buildLink('support'));
 		}
 
-		$topics = $this->getTopicRepo()->findTopics(0, \XF::visitor()->hasPermission('support', 'view_power'));
+		$topics = $this->getTopicRepo()->findTopics();
 
 		$filters = $this->getFilterInput();
 		$filters['assigned_user_id'] = \XF::visitor()->user_id;
@@ -115,7 +115,7 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 
 	public function actionView(ParameterBag $params)
 	{
-		$topics = $this->getTopicRepo()->findTopics(0, \XF::visitor()->hasPermission('support', 'view_power'));
+		$topics = $this->getTopicRepo()->findTopics();
 
 		$ticket = $this->assertViewableTicket($params->ticket_id);
 		$messages = $ticket->getRelationOrDefault('Comments', false);
@@ -252,7 +252,7 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 					'template' => 'kieran_support_ticket_create',
 					'extraViewParams' => [
                         'type' => $type,
-                        'priorities' => ['Low', 'Medium', 'Normal', 'High', 'Urgent'],
+                        'priorities' => TicketRepo::$Priority,
 						'canManage' => $this->getTicketTypeRepo()->canManage(),
 						'canCreate' => $this->getTicketTypeRepo()->canCreate(),
 						'canManageArticles' => \XF::visitor()->hasPermission('support', 'articles_can_manage'),
@@ -328,6 +328,36 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 			];
 
 			return $this->view('Kieran\Support:Ticket\Assign', 'kieran_support_ticket_assign', $viewParams);
+		}
+	}
+
+	public function actionPriority(ParameterBag $params)
+	{
+		$ticket = $this->assertViewableTicket($params->ticket_id);
+
+		if (!$ticket->canProcess())
+		{
+			throw $this->exception($this->noPermission());
+		}
+		
+		$status = $this->em()->findOne('Kieran\Support:Status', ['status_id' => $this->request->filter('status', 'str')]);
+
+		if ($this->isPost())
+		{
+			$commentPlugin = $this->plugin('Kieran\Support:TicketComment');
+			return $commentPlugin->actionTicketComment($ticket, null, $this->filter('priority', 'str'));
+		}
+		else
+		{
+			$viewParams = [
+				'ticket' => $ticket,
+				'canManage' => $this->getTicketTypeRepo()->canManage(),
+				'canCreate' => $this->getTicketTypeRepo()->canCreate(),
+				'canManageArticles' => \XF::visitor()->hasPermission('support', 'articles_can_manage'),
+				'allPriorities' => TicketRepo::$Priority,
+			];
+
+			return $this->view('Kieran\Support:Ticket\Priority', 'kieran_support_ticket_priority', $viewParams);
 		}
 	}
 
@@ -464,7 +494,7 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 				'filters' => $filters,
 				'starterFilter' => $starterFilter,
 				'allStatus' => $this->getStatusRepo()->getAll(true, false),
-                'allPriorities' => ['Low', 'Medium', 'Normal', 'High', 'Urgent'],
+                'allPriorities' => TicketRepo::$Priority,
 				'types' => $this->getTicketTypeRepo()->getAll(),
 			];
 
@@ -537,7 +567,7 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 		}
 
 		if (isset($input['priority'])) {
-			$filters['priority'] = array_intersect(['Low', 'Medium', 'Normal', 'High', 'Urgent'], $input['priority']);
+			$filters['priority'] = array_intersect(TicketRepo::$Priority, $input['priority']);
 		}
 
 		if (isset($input['type']) && count($input['type'])) {

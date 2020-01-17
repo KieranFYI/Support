@@ -3,15 +3,13 @@
 namespace Kieran\Support;
 
 use XF\Db\Schema\Create;
+use Kieran\Support\Repository\Ticket;
 
 class Setup extends \XF\AddOn\AbstractSetup
 {
 	use \XF\AddOn\StepRunnerInstallTrait;
 	use \XF\AddOn\StepRunnerUpgradeTrait;
 	use \XF\AddOn\StepRunnerUninstallTrait;
-
-	// php cmd.php xf-addon:install-step Kieran/Support 2
-	// php cmd.php xf-addon:build-release Kieran/Support
 
 	public function installStep1(array $stepParams = [])
 	{
@@ -23,7 +21,7 @@ class Setup extends \XF\AddOn\AbstractSetup
 			$table->addColumn('title', 'varchar', 50);
 			$table->addColumn('description', 'text');
 			$table->addColumn('display_order', 'int')->setDefault(1);
-			$table->addColumn('view_power_required', 'int')->setDefault(0);
+			$table->addColumn('groups', 'varbinary', 255);
 			$table->addColumn('icon', 'varchar', 25)->comment('fontawesome icon class.');
 			
 			$table->addPrimaryKey('topic_id');
@@ -36,7 +34,7 @@ class Setup extends \XF\AddOn\AbstractSetup
 			$table->addColumn('title', 'varchar', 50);
 			$table->addColumn('description', 'text');
 			$table->addColumn('display_order', 'int')->setDefault(1);
-			$table->addColumn('view_power_required', 'int')->setDefault(0);
+			$table->addColumn('groups', 'varbinary', 255);
 
 			$table->addColumn('type', 'enum', ['bbcode', 'link'])->setDefault('bbcode');
 			$table->addColumn('message', ' mediumtext');
@@ -53,8 +51,6 @@ class Setup extends \XF\AddOn\AbstractSetup
 	
 	public function installStep2(array $stepParams = [])
 	{
-		// TODO: Send email on ticket notifications (ticket created & ticket updated) for author only
-		// TODO: The type of page can be text, link or template (enter template name and return that)
 		$this->schemaManager()->createTable('xf_kieran_support_ticket', function(Create $table)
 		{
 			$table->addColumn('ticket_id', 'int')->autoIncrement();
@@ -63,7 +59,7 @@ class Setup extends \XF\AddOn\AbstractSetup
 			$table->addColumn('ticket_title', 'varchar', 150);
 			$table->addColumn('status_id', 'varchar', 100);
 			$table->addColumn('state', 'enum', ['visible', 'locked', 'hidden', 'awaiting', 'closed', 'deleted'])->setDefault('visible');
-			$table->addColumn('priority', 'enum', ['Low', 'Medium', 'Normal', 'High', 'Urgent'])->setDefault('Normal');
+			$table->addColumn('priority', 'enum', Ticket::$Priority)->setDefault('Normal');
 			$table->addColumn('assigned_user_id', 'int')->setDefault(0);
 			$table->addColumn('comment_count', 'int')->setDefault(0);
 			$table->addColumn('last_modified_date', 'int');
@@ -98,7 +94,7 @@ class Setup extends \XF\AddOn\AbstractSetup
 			$table->addColumn('ip_id', 'int')->setDefault(0);
 			$table->addColumn('comment_date', 'int');
 			$table->addColumn('status_change', 'varchar', 100);
-			$table->addColumn('priority_change', 'enum', ['Low', 'Medium', 'Normal', 'High', 'Urgent'])->nullable();
+			$table->addColumn('priority_change', 'enum', Ticket::$Priority)->nullable();
 			$table->addColumn('assigned_user_id', 'int')->setDefault(0);
 			$table->addColumn('is_ticket', 'tinyint', 3);
 			$table->addColumn('attach_count', 'smallint', 5)->setDefault(0);

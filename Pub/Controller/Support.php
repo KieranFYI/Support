@@ -42,7 +42,7 @@ class Support extends \XF\Pub\Controller\AbstractController
 	{
 		$topic = $this->assertViewableTopic($params->topic_slug);
 
-		$articles = $this->getArticleRepo()->findArticles($topic->topic_id, \XF::visitor()->hasPermission('support', 'view_power'));
+		$articles = $this->getArticleRepo()->findArticles($topic->topic_id);
 
 		if ($topic->slug != $params->topic_slug) {
 			return $this->redirect($this->router()->buildLink('support', ['topic_slug' => $topic->slug]));
@@ -51,6 +51,7 @@ class Support extends \XF\Pub\Controller\AbstractController
 		$topics = $this->getTopicRepo()->findTopics();
 
 		$viewParams = [
+			'topics' => $this->getTopicRepo()->findTopics(),
 			'topic' => $topic,
 			'articles' => $articles,
 			'canManage' => $this->getTicketTypeRepo()->canManage(),
@@ -144,7 +145,12 @@ class Support extends \XF\Pub\Controller\AbstractController
 		$topic = null;
 
 		if ($params->topic_slug) {
-			$topic = $this->assertViewableTopic($params->topic_slug);
+			$id = $params->topic_slug;
+			if (strpos($id, '-')) {
+				$id = substr($id, 0, strpos($id, '-'));
+			}
+	
+			$topic = $this->assertRecordExists('Kieran\Support:Topic', $id);
 		}
 		
 		$viewParams = [
@@ -152,8 +158,8 @@ class Support extends \XF\Pub\Controller\AbstractController
 			'canManage' => $this->getTicketTypeRepo()->canManage(),
 			'canCreate' => $this->getTicketTypeRepo()->canCreate(),
 			'canManageArticles' => \XF::visitor()->hasPermission('support', 'articles_can_manage'),
-			'currentTopics' => $this->getTopicRepo()->findTopics($params->topic_slug ? $params->topic_slug : 0, \XF::visitor()->hasPermission('support', 'view_power')),
-			'currentArticles' => $this->getArticleRepo()->findArticles($params->topic_slug ? $params->topic_slug : 0, \XF::visitor()->hasPermission('support', 'view_power')),
+			'currentTopics' => $this->getTopicRepo()->findTopics($params->topic_slug ? $params->topic_slug : 0, true),
+			'currentArticles' => $this->getArticleRepo()->findArticles($params->topic_slug ? $params->topic_slug : 0, true),
 			'topic' => $topic,
 		];
 
@@ -166,7 +172,7 @@ class Support extends \XF\Pub\Controller\AbstractController
 		}
 
 		$topic = $this->assertRecordExists('Kieran\Support:Topic', $id, $with, $phraseKey);
-		if (\XF::visitor()->hasPermission('support', 'view_power') < $topic->view_power_required) {
+		if (!$topic->canView()) {
 			throw $this->exception($this->notFound(\XF::phrase('requested_page_not_found')));
 		}
 		return $topic;
@@ -177,7 +183,7 @@ class Support extends \XF\Pub\Controller\AbstractController
 			$id = substr($id, 0, strpos($id, '-'));
 		}
 		$article = $this->assertRecordExists('Kieran\Support:Article', $id, $with, $phraseKey);
-		if (\XF::visitor()->hasPermission('support', 'view_power') < $article->view_power_required) {
+		if (!$article->canView()) {
 			throw $this->exception($this->notFound(\XF::phrase('requested_page_not_found')));
 		}
 		return $article;
