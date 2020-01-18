@@ -57,6 +57,9 @@
   <phrase title="kieran_support_view_ticket" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[View ticket]]></phrase>
   <phrase title="kieran_support_view_tickets" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[View tickets]]></phrase>
   <phrase title="kieran_support_viewing" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Viewing Support]]></phrase>
+  <phrase title="kieran_support_viewing_article" version_id="1000170" version_string="1.0.1"><![CDATA[Viewing Support article]]></phrase>
+  <phrase title="kieran_support_viewing_ticket" version_id="1000170" version_string="1.0.1"><![CDATA[Viewing Support ticket]]></phrase>
+  <phrase title="kieran_support_viewing_topic" version_id="1000170" version_string="1.0.1"><![CDATA[Viewing Support topic]]></phrase>
   <phrase title="kieran_support_what_can_we_help_you_with" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[What can we help you with?]]></phrase>
   <phrase title="nav.support" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Support]]></phrase>
   <phrase title="nav.supportMyTickets" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[My Tickets]]></phrase>

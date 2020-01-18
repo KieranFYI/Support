@@ -640,6 +640,6 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 
 	public static function getActivityDetails(array $activities)
 	{
-		return \XF::phrase('kieran_support_viewing');
+		return \XF::phrase('kieran_support_viewing_ticket');
 	}
 }
