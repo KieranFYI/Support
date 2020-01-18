@@ -3,7 +3,6 @@
 namespace Kieran\Support\Admin\Controller;
 
 use XF\Mvc\ParameterBag;
-use XF\Mvc\FormAction;
 use XF\Admin\Controller\AbstractField;
 
 class TicketField extends AbstractField
