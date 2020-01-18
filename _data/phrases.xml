@@ -24,8 +24,6 @@
   <phrase title="kieran_support_ticket_change_priority" version_id="1000170" version_string="1.0.1"><![CDATA[Change priority]]></phrase>
   <phrase title="kieran_support_ticket_change_status" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Change status]]></phrase>
   <phrase title="kieran_support_ticket_create" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Create ticket]]></phrase>
-  <phrase title="kieran_support_ticket_create_appeal" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Ban Appeal]]></phrase>
-  <phrase title="kieran_support_ticket_create_application" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Application]]></phrase>
   <phrase title="kieran_support_ticket_create_ticket" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Ticket]]></phrase>
   <phrase title="kieran_support_ticket_disable_message" version_id="1000031" version_string="1.0.0 Beta"><![CDATA[Disable User Message]]></phrase>
   <phrase title="kieran_support_ticket_disable_title" version_id="1000031" version_string="1.0.0 Beta"><![CDATA[Disable User Title]]></phrase>
