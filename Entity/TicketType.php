@@ -77,7 +77,7 @@ class TicketType extends Entity
 		}
 	}
 
-    public $PermissionTypes = [
+    public static $PermissionTypes = [
         'create',
         'process',
         'view',
@@ -87,10 +87,11 @@ class TicketType extends Entity
 
 	public function _preDelete() {
 
-		foreach ($this->PermissionTypes as $perm) {
+		foreach (self::$PermissionTypes as $perm) {
 			$perm = $this->em()->find('XF:Permission', [
 				'permission_group_id' => 'support',
-				'permission_id' => $perm . '_' . $this->type_id
+				'permission_id' => $perm . '_' . $this->type_id,
+				'interface_group_id' => 'supportTicket',
             ]);
             
 			if ($perm) {
@@ -101,12 +102,12 @@ class TicketType extends Entity
 
     public function checkAndCreatePermissions() {
 
-		foreach ($this->PermissionTypes as $key => $perm) {
+		foreach (self::$PermissionTypes as $key => $perm) {
 
 			$permCheck = $this->em()->find('XF:Permission', [
 				'permission_group_id' => 'support',
-                'permission_id' => $perm . '_' . $this->type_id,
-                'addon_id' => 'Kieran/Support'
+				'permission_id' => $perm . '_' . $this->type_id,
+				'interface_group_id' => 'supportTicket',
             ]);
             
 			if (!$permCheck) {
@@ -117,7 +118,6 @@ class TicketType extends Entity
 				$permission->interface_group_id = 'supportTicket';
 				$permission->depend_permission_id = '';
 				$permission->display_order = 100 + ($this->type_id * 10) + $key;
-				$permission->addon_id = 'Kieran/Support';
                 $permission->save();
                 
                 $title = $permission->getMasterPhrase();

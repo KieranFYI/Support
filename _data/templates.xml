@@ -1074,7 +1074,7 @@
 		<xf:submitrow submit="{{ phrase('update') }}" />
 	</div>
 </xf:form>]]></template>
-  <template type="public" title="kieran_support_tickets" version_id="1000031" version_string="1.0.0 Beta"><![CDATA[<xf:title>My tickets</xf:title>
+  <template type="public" title="kieran_support_tickets" version_id="1000170" version_string="1.0.1"><![CDATA[<xf:title>My tickets</xf:title>
 <xf:description>View, update and track your tickets.</xf:description>
 <xf:wrap template="kieran_support_wrapper">
 	<xf:set var="$pageSelected" value="tickets" />
@@ -1085,11 +1085,11 @@
 		<div class="block-body">
 			<xf:datalist data-xf-init="responsive-data-list">
 				<xf:datarow rowtype="header">
-					<xf:cell>Status</xf:cell>
-					<xf:cell>Priority</xf:cell>
-					<xf:cell>Title</xf:cell>
-					<xf:cell>Created</xf:cell>
-					<xf:cell>Last updated</xf:cell>
+					<xf:cell>{{ phrase('status') }}</xf:cell>
+					<xf:cell>{{ phrase('priority') }}</xf:cell>
+					<xf:cell>{{ phrase('title') }}</xf:cell>
+					<xf:cell>{{ phrase('created') }}</xf:cell>
+					<xf:cell>{{ phrase('last_updated') }}</xf:cell>
 				</xf:datarow>
 				<xf:if is="$xf.visitor.user_id">
 					<xf:if is="$tickets is not empty">
@@ -1130,7 +1130,7 @@
 		</div>
 	</div>
 </div>]]></template>
-  <template type="public" title="kieran_support_tickets_manage" version_id="1000031" version_string="1.0.0 Beta"><![CDATA[<xf:if is="$assigned">
+  <template type="public" title="kieran_support_tickets_manage" version_id="1000170" version_string="1.0.1"><![CDATA[<xf:if is="$assigned">
 	<xf:title>Assigned tickets</xf:title>
 	<xf:description>View, update and track all your assigned tickets.</xf:description>
 	<xf:set var="$pageSelected" value="assigned" />
@@ -1174,14 +1174,11 @@
 			
 			<xf:datalist data-xf-init="responsive-data-list">
 				<xf:datarow rowtype="header">
-					<xf:cell>Status</xf:cell>
-					<xf:cell>Priority</xf:cell>
-					<xf:cell>Creator</xf:cell>
-					<xf:cell>Title</xf:cell>
-					<xf:cell>Last updated</xf:cell>
-					<xf:if is="!$assigned">
-						<xf:cell>Assignee</xf:cell>
-					</xf:if>
+					<xf:cell>{{ phrase('status') }}</xf:cell>
+					<xf:cell>{{ phrase('priority') }}</xf:cell>
+					<xf:cell>{{ phrase('created_by') }}</xf:cell>
+					<xf:cell>{{ phrase('title') }}</xf:cell>
+					<xf:cell>{{ phrase('last_updated') }}</xf:cell>
 				</xf:datarow>
 				<xf:if is="$xf.visitor.user_id">
 					<xf:if is="$tickets is not empty">
@@ -1200,15 +1197,6 @@
 								<xf:cell class="contentRow"><xf:username user="$ticket.User" rich="true" /></xf:cell>
 								<xf:main label="{$ticket.ticket_title}" href="{{ link('support/tickets', $ticket) }}" hint="#{$ticket.ticket_id}" />
 								<xf:cell class="contentRow-minor" href="{{ link('support/ticket/', $ticket) }}"><xf:date time="{$ticket.ticket_date}" /></xf:cell>	
-								<xf:if is="!$assigned">
-									<xf:cell class="contentRow">
-										<xf:if is="$ticket.assigned_user_id">
-											<xf:username user="$ticket.AssignedUser" rich="true" />
-										<xf:else />
-											N/A
-										</xf:if>
-									</xf:cell>
-								</xf:if>
 							</xf:datarow>
 						</xf:foreach>
 					<xf:else />
@@ -1390,28 +1378,8 @@
 	</ul>
 </xf:description>
 
-<div class="block">
-	<div class="block-outer">
-		<div class="block-outer-after">
-			<xf:if is="$ticket.isClosed() or $ticket.state == 'locked'">
-				<dl class="blockStatus blockStatus--simple">
-					<dt>{{ phrase('status') }}</dt>
-					<dd class="blockStatus-message blockStatus-message--locked">
-						{{ phrase('not_open_for_further_replies') }}
-					</dd>
-				</dl>
-			</xf:if>
-
-			<xf:if is="$ticket.status.message != '' && $xf.visitor.user_id == $ticket.user_id">
-				<dl class="blockStatus">
-					<dt>{{ phrase('status') }}</dt>
-					<dd class="blockStatus-message blockStatus-message--{$ticket.status.status_id}">
-						{{ $ticket.status.message }}
-					</dd>
-				</dl>
-			</xf:if>
-		</div>
-		
+<xf:pageaction>
+	<div class="filterBar">
 		<xf:if is="!$ticket.isClosed()">
 			<xf:trim>
 				<div class="block-outer-opposite">
@@ -1436,7 +1404,7 @@
 									<xf:button class="button--link menuTrigger" data-xf-click="menu" aria-expanded="false" aria-haspopup="true" title="{{ phrase('more_options')|for_attr }}">&#8226;&#8226;&#8226;</xf:button>
 									<div class="menu" data-menu="menu" aria-hidden="true">
 										<div class="menu-content">
-											<h4 class="menu-header">{{ phrase('more_options') }}</h4>
+											<h4 class="menu-header">{{ phrase('options') }}</h4>
 											<xf:contentcheck>
 												<a href="{{ link('support/tickets/assign', $ticket) }}" data-xf-click="overlay" class="menu-linkRow">{{ phrase('kieran_support_assign_ticket') }}</a>
 
@@ -1456,6 +1424,60 @@
 					</div>
 				</div>
 			</xf:trim>
+		</xf:if>
+	</div>
+</xf:pageaction>
+
+<div class="block">
+	<div class="block-outer block-outer--before">
+		<div class="blockMessage">
+			<div class="pairJustifier">
+				<dl class="pairs pairs--rows">
+					<dt>{{ phrase('type') }}</dt>
+					<dd>{$ticket.TicketType.name}</dd>
+				</dl>
+				<dl class="pairs pairs--rows">
+					<dt>{{ phrase('status') }}</dt>
+					<dd>{$ticket.status.name}</dd>
+				</dl>
+				<dl class="pairs pairs--rows">
+					<dt>{{ phrase('priority') }}</dt>
+					<dd>{$ticket.priority}</dd>
+				</dl>
+				<dl class="pairs pairs--rows">
+					<dt>{{ phrase('assignee') }}</dt>
+					<dd>
+						<xf:if is="$ticket.assigned_user_id">
+							<xf:username user="$ticket.AssignedUser" rich="true" />
+						<xf:else />
+							N/A
+						</xf:if>
+					</dd>
+				</dl>
+				<dl class="pairs pairs--rows">
+					<dt>{{ phrase('last_updated') }}</dt>
+					<dd><xf:date time="{$ticket.ticket_date}" /></dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+	<div class="block-outer block-outer--before">
+		<xf:if is="$ticket.isClosed() or $ticket.state == 'locked'">
+			<dl class="blockStatus">
+				<dt>{{ phrase('status') }}</dt>
+				<dd class="blockStatus-message blockStatus-message--locked">
+					{{ phrase('not_open_for_further_replies') }}
+				</dd>
+			</dl>
+		</xf:if>
+
+		<xf:if is="$ticket.status.message != '' && $xf.visitor.user_id == $ticket.user_id">
+			<dl class="blockStatus">
+				<dt>{{ phrase('status') }}</dt>
+				<dd class="blockStatus-message blockStatus-message--{$ticket.status.status_id}">
+					{{ $ticket.status.message }}
+				</dd>
+			</dl>
 		</xf:if>
 	</div>
 	
@@ -1613,7 +1635,7 @@
 
 <xf:css src="message.less" />
 <xf:js src="xf/message.js" min="1" />]]></template>
-  <template type="public" title="kieran_support_view_ticket.less" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[.message-state {
+  <template type="public" title="kieran_support_view_ticket.less" version_id="1000170" version_string="1.0.1"><![CDATA[.message-state {
 
 	&--hidden {
 		background-color: #ecf0f1;
@@ -1624,6 +1646,10 @@
 }
 
 .blockMessage {
+	margin-bottom: 0px;
+}
+
+.blockMessage2 {
 	
 	border-left: 3px solid;
 	min-height: 26px;
