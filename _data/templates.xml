@@ -1346,11 +1346,11 @@
 		</div>
 	</div>
 </div>]]></template>
-  <template type="public" title="kieran_support_view_ticket" version_id="1000170" version_string="1.0.1"><![CDATA[<xf:title>{$ticket.ticket_title} #{$ticket.ticket_id}</xf:title>
+  <template type="public" title="kieran_support_view_ticket" version_id="1000270" version_string="1.0.2"><![CDATA[<xf:title>{$ticket.ticket_title} #{$ticket.ticket_id}</xf:title>
 <xf:h1>{$ticket.ticket_title} <span class="u-muted">#{$ticket.ticket_id}</span></xf:h1>
 
 <xf:wrap template="kieran_support_wrapper">
-	<xf:set var="$pageSelected" value="{{ $xf.visitor.user_id == $ticket.user_id ? 'ticket' : 'manage' }}" />
+	<xf:set var="$pageSelected" value="{{ $xf.visitor.user_id == $ticket.user_id ? 'ticket' : 'all' }}" />
 </xf:wrap>
 
 <xf:if is="$xf.visitor.user_id == $ticket.user_id">
