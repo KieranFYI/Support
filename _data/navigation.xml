@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation>
   <navigation_entry navigation_id="support" display_order="700" navigation_type_id="basic" enabled="1"><![CDATA[{"link":"{{ link('support') }}","display_condition":"","extra_attributes":[]}]]></navigation_entry>
+  <navigation_entry navigation_id="supportAllTickets" parent_navigation_id="support" display_order="3" navigation_type_id="callback" enabled="1"><![CDATA[{"callback":["Kieran\\Support\\Events\\Navigation","allTickets"],"context":""}]]></navigation_entry>
+  <navigation_entry navigation_id="supportAssignedTickets" parent_navigation_id="support" display_order="2" navigation_type_id="callback" enabled="1"><![CDATA[{"callback":["Kieran\\Support\\Events\\Navigation","assignedTickets"],"context":""}]]></navigation_entry>
   <navigation_entry navigation_id="supportMyTickets" parent_navigation_id="support" display_order="1" navigation_type_id="basic" enabled="1"><![CDATA[{"link":"{{ link('support\/tickets\/') }}","display_condition":"","extra_attributes":[]}]]></navigation_entry>
 </navigation>
