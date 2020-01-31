@@ -125,6 +125,7 @@ class Types extends \XF\Admin\Controller\AbstractController
 		$statuses = $this->getStatusRepo()->getAll(true, false);
 		$input['status'][] = 'open';
 		$input['status'][] = 'locked';
+		$input['status'][] = 'closed';
 		$input['status'][] = 'awaiting';
 		foreach ($statuses as $value) {
 			if (in_array($value->status_id, $input['status']) && !$type->isStatusSelected($value->status_id)) {
