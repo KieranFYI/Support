@@ -23,6 +23,18 @@ class Topic extends Entity
 		return $this->topic_id . '-' . $slug;
 	}
 
+	public function getViewableChildren() {
+		$topics = [];
+
+		foreach ($this->Children as $topic) {
+			if ($topic->canView()) {
+				$topics[] = $topic;
+			}
+		}
+
+		return $topics;
+	}
+
 	public static function getStructure(Structure $structure)
 	{
 		$structure->table = 'xf_kieran_support_topic';
@@ -41,6 +53,7 @@ class Topic extends Entity
 		];
         $structure->getters = [
 			'slug' => true,
+			'viewableChildren' => true,
 		];
 		$structure->relations = [
 			'Parent' => [

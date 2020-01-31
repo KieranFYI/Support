@@ -47,9 +47,7 @@ class Support extends \XF\Pub\Controller\AbstractController
 		if ($topic->slug != $params->topic_slug) {
 			return $this->redirect($this->router()->buildLink('support', ['topic_slug' => $topic->slug]));
 		}
-
-		$topics = $this->getTopicRepo()->findTopics();
-
+		
 		$viewParams = [
 			'topics' => $this->getTopicRepo()->findTopics(),
 			'topic' => $topic,

@@ -1284,14 +1284,14 @@
 		<xf:submitrow icon="save" sticky="true" />
 	</xf:form>
 </div>]]></template>
-  <template type="public" title="kieran_support_topic_view" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{$topic.title}</xf:title>
+  <template type="public" title="kieran_support_topic_view" version_id="1000270" version_string="1.0.2"><![CDATA[<xf:title>{$topic.title}</xf:title>
 <xf:description>{$topic.description}</xf:description>
 
 <xf:wrap template="kieran_support_wrapper">
 	<xf:set var="$pageSelected" value="{$topic.slug}" />
 </xf:wrap>
 
-<xf:if is="$topic.Children is not empty">
+<xf:if is="$topic.viewableChildren is not empty">
 	<div class="block">
 		<div class="block-container">
 			<h2 class="block-formSectionHeader">
@@ -1299,7 +1299,7 @@
 			</h2>
 			<div class="block-body">
 				<xf:datalist>
-					<xf:foreach loop="$topic.Children" value="$child">
+					<xf:foreach loop="$topic.viewableChildren" value="$child">
 						<xf:datarow rowclass="dataList-row">
 							<xf:cell class="dataList-cell--min dataList-cell--alt"
 									 href="/support/{$child.slug}/">
