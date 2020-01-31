@@ -1130,7 +1130,7 @@
 		</div>
 	</div>
 </div>]]></template>
-  <template type="public" title="kieran_support_tickets_manage" version_id="1000170" version_string="1.0.1"><![CDATA[<xf:if is="$assigned">
+  <template type="public" title="kieran_support_tickets_manage" version_id="1000270" version_string="1.0.2"><![CDATA[<xf:if is="$assigned">
 	<xf:title>Assigned tickets</xf:title>
 	<xf:description>View, update and track all your assigned tickets.</xf:description>
 	<xf:set var="$pageSelected" value="assigned" />
@@ -1196,7 +1196,7 @@
 								</xf:cell>
 								<xf:cell class="contentRow"><xf:username user="$ticket.User" rich="true" /></xf:cell>
 								<xf:main label="{$ticket.ticket_title}" href="{{ link('support/tickets', $ticket) }}" hint="#{$ticket.ticket_id}" />
-								<xf:cell class="contentRow-minor" href="{{ link('support/ticket/', $ticket) }}"><xf:date time="{$ticket.ticket_date}" /></xf:cell>	
+								<xf:cell class="contentRow-minor" href="{{ link('support/ticket/', $ticket) }}"><xf:date time="{$ticket.last_modified_date}" /></xf:cell>	
 							</xf:datarow>
 						</xf:foreach>
 					<xf:else />
@@ -1456,7 +1456,7 @@
 				</dl>
 				<dl class="pairs pairs--rows">
 					<dt>{{ phrase('last_updated') }}</dt>
-					<dd><xf:date time="{$ticket.ticket_date}" /></dd>
+					<dd><xf:date time="{$ticket.last_modified_date}" /></dd>
 				</dl>
 			</div>
 		</div>
