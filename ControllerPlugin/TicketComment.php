@@ -28,7 +28,7 @@ class TicketComment extends \XF\ControllerPlugin\AbstractPlugin
 		{
 			$commenter->setTicketStatus($status);
 		} else {
-			if ($commenter->getTicket()->status == 'new' 
+			if ($commenter->getTicket()->status_id == 'new' 
 			 && $commenter->getTicket()->user_id != \XF::visitor()->user_id) {
 
 				$commenter->getTicket()->status_id = 'open';
