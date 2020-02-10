@@ -55,31 +55,27 @@ class Ticket extends Entity
 		return $this->getTicketCommentRepo()->findLastCommentBy($user_id, $this->ticket_id);
 	}
 
-	public function notifyWatchers($current_user = false) {
+	public function notifyWatchers($comment_id) {
 
-		if ($current_user) {
-			$current_user = $this->em()->find('XF:User', $current_user);
-		}
+		$current_user = \XF::visitor();
 
+		$alertRepo = $this->repository('XF:UserAlert');
 		foreach ($this->watchers as $watcher) {
 
-			if (!$watcher->hasPermission('support', 'view_' . $this->TicketType->type_id)
-				|| $current_user->user_id == $watcher->user_id) {
+			if ((!$this->TicketType->canView($watcher) && $watcher->user_id != $this->user_id ) || $current_user->user_id == $watcher->user_id) {
 				continue;
 			}
 
-			$alertRepo = $this->repository('XF:UserAlert');
 			$alertRepo->alert(
 				$watcher,
-				$current_user ? $current_user->user_id : 0,
-				$current_user ? $current_user->username : '',
+				$current_user->user_id,
+				$current_user->username,
 				'ticket_message', 
-				$this->ticket_id,
-				$this->user_id == $watcher->user_id ? 'updated' : 'watched', 
+				$comment_id,
+				'updated', 
 				[]
 			);
 		}
-
 	}
 
 	public function canView($error=null)
@@ -246,11 +242,12 @@ class Ticket extends Entity
 	public function getWatchers()
 	{
 		$watchers = $this->finder('Kieran\Support:Watcher')->where('ticket_id', $this->ticket_id)->fetch();
-		$a = [$this->em()->find('XF:User', $this->user_id)];
+		$users = [$this->em()->find('XF:User', $this->user_id)];
 		foreach ($watchers as $watcher) {
-			$a[] = $this->em()->find('XF:User', $watcher['user_id']);
+			$users[] = $this->em()->find('XF:User', $watcher['user_id']);
 		}
-		return $a;
+
+		return $users;
 	}
 	
 	public function getDraftReply()

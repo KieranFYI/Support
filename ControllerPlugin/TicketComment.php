@@ -50,7 +50,7 @@ class TicketComment extends \XF\ControllerPlugin\AbstractPlugin
 	protected function finalizeTicketComment(Commenter $commenter)
 	{
 		$commenter->getTicket()->addWatcher($commenter->getComment()->user_id);
-		$commenter->getTicket()->notifyWatchers($commenter->getComment()->user_id);
+		$commenter->getTicket()->notifyWatchers($commenter->getComment()->ticket_comment_id);
 
 		$ticket = $commenter->getTicket();
 		$ticket->draft_reply->delete();
@@ -62,7 +62,7 @@ class TicketComment extends \XF\ControllerPlugin\AbstractPlugin
 			}
 			
 			$field = $this->em()->create('Kieran\Support:TicketFieldValue');
-			$field->ticket_comment_id = $creator->getComment()->ticket_comment_id;
+			$field->ticket_comment_id = $commenter->getComment()->ticket_comment_id;
 			$field->field_id = $key;
 			$field->field_value = $value;
 			$field->save();

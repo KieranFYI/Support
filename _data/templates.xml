@@ -217,10 +217,8 @@
 		</xf:foreach>
 	</table>
 </div>]]></template>
-  <template type="public" title="alert_ticket_message_updated" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[{{ phrase('kieran_support_ticket_updated') }}
-<a href="{{ link('support/tickets', $content) }}">{{ phrase('kieran_support_view_ticket') }}</a>]]></template>
-  <template type="public" title="alert_ticket_message_watched" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[{{ phrase('kieran_support_ticket_watched_updated') }}
-<a href="{{ link('support/tickets', $content) }}">{{ phrase('kieran_support_view_ticket') }}</a>]]></template>
+  <template type="public" title="alert_ticket_message_updated" version_id="1000270" version_string="1.0.2"><![CDATA[<xf:username user="$content->User" rich="true" /> {{ phrase('kieran_support_ticket_updated') }} <a href="{{ link('support/tickets', $content) }}">{{$content->Ticket->ticket_title}}</a>]]></template>
+  <template type="public" title="alert_ticket_message_watched" version_id="1000270" version_string="1.0.2"><![CDATA[<xf:username user="$content->User" rich="true" /> {{ phrase('kieran_support_ticket_updated') }} <a href="{{ link('support/tickets', $content) }}">{{$content->Ticket->ticket_title}}</a>]]></template>
   <template type="public" title="kieran_support" version_id="1000170" version_string="1.0.1"><![CDATA[<xf:title>{{ phrase('kieran_support_title') }}</xf:title>
 <xf:description>We're here to help.</xf:description>
 

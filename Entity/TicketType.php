@@ -18,40 +18,46 @@ class TicketType extends Entity
 		return isset($this->statuses[$status]);
 	}
 
-	public function canView($error=null)
+	public function canView($user=null)
 	{
-		$visitor = \XF::visitor();
+		if ($user == null) {
+			$user = \XF::visitor();
+		}
 
-		if (!$visitor->user_id)
+		if (!$user->user_id)
 		{
 			return false;
 		}
 
-		return $visitor->hasPermission('support', 'view_' . $this->type_id);
+		return $user->hasPermission('support', 'view_' . $this->type_id);
 	}
 
-	public function canCreate($error=null)
+	public function canCreate($user=null)
 	{
-		$visitor = \XF::visitor();
+		if ($user == null) {
+			$user = \XF::visitor();
+		}
 
-		if (!$visitor->user_id)
+		if (!$user->user_id)
 		{
 			return false;
 		}
 	
-		return $visitor->hasPermission('support', 'create_' . $this->type_id);
+		return $user->hasPermission('support', 'create_' . $this->type_id);
 	}
 
-	public function canProcess()
+	public function canProcess($user=null)
 	{
-		$visitor = \XF::visitor();
+		if ($user == null) {
+			$user = \XF::visitor();
+		}
 
-		if (!$visitor->user_id)
+		if (!$user->user_id)
 		{
 			return false;
 		}
 	
-		return $visitor->hasPermission('support', 'process_' . $this->type_id);
+		return $user->hasPermission('support', 'process_' . $this->type_id);
 	}
 
 	public function canDelete($delete_type = null)

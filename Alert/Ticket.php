@@ -7,6 +7,11 @@ use XF\Alert\AbstractHandler;
 
 class Ticket extends AbstractHandler
 {
+	
+	public function canViewContent(Entity $entity, &$error = null)
+	{
+		return true;
+	}
 
 	public function getOptOutActions()
 	{

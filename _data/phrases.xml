@@ -43,8 +43,7 @@
   <phrase title="kieran_support_ticket_types" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Ticket Types]]></phrase>
   <phrase title="kieran_support_ticket_types_add" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Add type]]></phrase>
   <phrase title="kieran_support_ticket_types_edit" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Edit type]]></phrase>
-  <phrase title="kieran_support_ticket_updated" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Your ticket has been updated]]></phrase>
-  <phrase title="kieran_support_ticket_watched_updated" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[A ticket you watch has been updated]]></phrase>
+  <phrase title="kieran_support_ticket_updated" version_id="1000270" version_string="1.0.2"><![CDATA[has updated ticket]]></phrase>
   <phrase title="kieran_support_tickets" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Tickets]]></phrase>
   <phrase title="kieran_support_tickets_awaiting_subject" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[You have tickets awaiting responses]]></phrase>
   <phrase title="kieran_support_tickets_manage" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Manage]]></phrase>
