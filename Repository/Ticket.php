@@ -102,13 +102,16 @@ class Ticket extends Repository
 		if (isset($filters['state']) && count($filters['state']) > 0) {
 			$finder->where('state', $filters['state']);
 		} else {
-			$finder->where('state', ['locked', 'visible', 'hidden', 'awaiting']);
+//			$finder->where('state', ['locked', 'visible', 'hidden', 'awaiting']);
+			$finder->whereSql('state IN ("locked", "visible", "hidden", "awaiting") OR (state="closed" AND last_modified_date > (UNIX_TIMESTAMP() - 86400))');
 		}
 
 		if (isset($filters['type']) && count($filters['type']) > 0)
 		{
 			$finder->where('type_id', $filters['type']);
 		}
+		
+		$finder->order($finder->expression('state="closed"'));
 
 		if (isset($filters['order']) && isset($filters['direction']))
 		{
@@ -122,8 +125,6 @@ class Ticket extends Repository
 		if (isset($filters['assigned_user_id']) && $filters['assigned_user_id'] > 0) {
 			$finder->where('assigned_user_id', $filters['assigned_user_id']);
 		}
-
-
 
 		return $finder;
 	}

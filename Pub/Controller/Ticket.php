@@ -52,7 +52,6 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 
 		$this->assertValidPage($page, $perPage, $total, 'support/tickets/manage');
 
-
 		$tickets = $finder->fetch();
 
 		$viewParams = [
@@ -566,7 +565,7 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 			$filters['status'] = array_intersect($valid, $input['status']);
 		}
 
-		if (isset($input['priority'])) {
+		if (isset($input['priority']) && count($input['priority'])) {
 			$filters['priority'] = array_intersect(TicketRepo::$Priority, $input['priority']);
 		}
 
