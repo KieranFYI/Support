@@ -8,6 +8,20 @@ use XF\Mvc\Entity\Structure;
 class Status extends Entity
 {
 
+	public function canUse($user=null)
+	{
+		if ($user == null) {
+			$user = \XF::visitor();
+		}
+
+		if (!$user->user_id)
+		{
+			return false;
+		}
+
+		return count(array_intersect(array_merge($user->secondary_group_ids, [$user->user_group_id]), $this->groups));
+	}
+
 	public function canDelete()
 	{
 		return !$this->getRelationOrDefault('Tickets', false)->count();
@@ -36,16 +50,6 @@ class Status extends Entity
 		return $a;
 	}
 
-	public function _preDelete() {
-		$perm = $this->em()->find('XF:Permission', [
-			'permission_group_id' => 'support',
-			'permission_id' => $this->status_id,
-		]);
-		if ($perm) {
-			$perm->delete();
-		}
-	}
-
     public static function getStructure(Structure $structure)
 	{
         $structure->table = 'xf_kieran_support_ticket_status';
@@ -60,6 +64,9 @@ class Status extends Entity
 			],
             'enabled' => ['type' => self::UINT, 'default' => 0],
             'undeletable' => ['type' => self::UINT, 'default' => 0],
+			'groups' => ['type' => self::LIST_COMMA, 'default' => [],
+				'list' => ['type' => 'posint', 'unique' => true, 'sort' => SORT_NUMERIC]
+			],
         ];
         $structure->getters = [
 			'fields' => true

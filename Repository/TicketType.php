@@ -8,13 +8,6 @@ use XF\Mvc\Entity\Repository;
 class TicketType extends Repository
 {
 
-	public function getNextPermissionID() {
-		$permCheck = $this->em()->find('XF:Permission', [
-				'permission_group_id' => 'support'
-			])->order('display_order', 'desc')->fetchOne();
-		return $permCheck->display_order + 1;
-	}
-
 	public function canManage() {
 		$visitor = \XF::visitor();
 

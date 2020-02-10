@@ -14,13 +14,13 @@ class Statuses extends \XF\Admin\Controller\AbstractController
 
 	protected function statusAddEdit(\Kieran\Support\Entity\Status $status)
 	{
-		$viewParams = [
+		return $this->view('Kieran\Support:Statuses\Add', 'kieran_support_statuses_edit', [
 			'status' => $status,
 			'success' => $this->filter('success', 'bool'),
 			'fields' => $this->getTicketFieldRepo()->findFieldsForList()->fetch(),
-			'states' => ['visible', 'locked', 'hidden', 'awaiting', 'closed']
-		];
-		return $this->view('Kieran\Support:Statuses\Add', 'kieran_support_statuses_edit', $viewParams);
+			'states' => ['visible', 'locked', 'hidden', 'awaiting', 'closed'],
+			'userGroups' => $this->em()->getRepository('XF:UserGroup')->getUserGroupTitlePairs(),
+		]);
 	}
 
 	public function actionEdit(ParameterBag $params)
@@ -86,7 +86,8 @@ class Statuses extends \XF\Admin\Controller\AbstractController
 				'status_id' => 'str',
 				'name' => 'str',
 				'message' => 'str',
-				'state' => 'str'
+				'state' => 'str',
+				'groups' => 'array',
 			],
 			'fields' => 'array'
 		]);

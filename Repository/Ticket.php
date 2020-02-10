@@ -39,9 +39,9 @@ class Ticket extends Repository
 					->fetch();
 	}
 	
-	public function findTickets($filters, $page = 1, $perPage = 25)
+	public function findTickets($typeLimit, $filters, $page = 1, $perPage = 25)
 	{
-		$finder = $this->buildQuery($filters);
+		$finder = $this->buildQuery($typeLimit, $filters);
 		$finder->limitByPage($page, $perPage);
 		return $finder;
 	}
@@ -52,12 +52,12 @@ class Ticket extends Repository
 			$state = [$state];
 		}
 
-		$finder = $this->buildQuery(['state' => $state]);
+		$finder = $this->buildQuery([], ['state' => $state]);
 		
 		return $finder->fetch();
 	}
 
-	private function buildQuery($filters)
+	private function buildQuery($typeLimit, $filters)
 	{
 		$finder = $this->finder('Kieran\Support:Ticket');
 
@@ -110,6 +110,7 @@ class Ticket extends Repository
 		{
 			$finder->where('type_id', $filters['type']);
 		}
+		$finder->where('type_id', $typeLimit);
 		
 		$finder->order($finder->expression('state="closed"'));
 

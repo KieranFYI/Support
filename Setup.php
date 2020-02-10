@@ -134,6 +134,7 @@ class Setup extends \XF\AddOn\AbstractSetup
 			$table->addColumn('state', 'enum', ['visible', 'locked', 'hidden', 'awaiting', 'closed', 'deleted'])->setDefault('visible');
 			$table->addColumn('enabled', 'int', 1)->setDefault(0);
 			$table->addColumn('undeletable', 'int', 1)->setDefault(0);
+			$table->addColumn('groups', 'varbinary', 255);
 			$table->addPrimaryKey('status_id');
 			$table->addKey(['status_id'], 'status_id');
 		});
@@ -226,6 +227,13 @@ class Setup extends \XF\AddOn\AbstractSetup
 	
 	public function upgrade(array $stepParams = [])
 	{
+
+		if (!$this->schemaManager()->columnExists('xf_kieran_support_ticket_status', 'groups')) {
+            $this->schemaManager()->alterTable('xf_kieran_support_ticket_status', function (Alter $table)
+			{
+				$table->addColumn('groups', 'varbinary', 255);
+			});
+		}
 
 		if (!$this->schemaManager()->columnExists('xf_kieran_support_ticket_type', 'groups_view')) {
             $this->schemaManager()->alterTable('xf_kieran_support_ticket_type', function (Alter $table)

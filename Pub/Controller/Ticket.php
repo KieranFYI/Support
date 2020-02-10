@@ -47,7 +47,7 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 
 		$page = $this->filterPage();
 		$perPage = 25;
-		$finder = $this->getTicketRepo()->findTickets($filters, $page, $perPage);
+		$finder = $this->getTicketRepo()->findTickets(array_column($this->getTicketTypeRepo()->getAllCreatable(), 'type_id'), $filters, $page, $perPage);
 		$total = $finder->total();
 
 		$this->assertValidPage($page, $perPage, $total, 'support/tickets/manage');
@@ -371,7 +371,7 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 		
 		$status = $this->em()->findOne('Kieran\Support:Status', ['status_id' => $this->request->filter('status', 'str')]);
 
-		if (!$status) {
+		if (!$status || !$status->canUse()) {
 			if ($this->request->isXhr()) {
 				$viewParams = [
 					'ticket' => $ticket,
@@ -494,7 +494,7 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 				'starterFilter' => $starterFilter,
 				'allStatus' => $this->getStatusRepo()->getAll(true, false),
                 'allPriorities' => TicketRepo::$Priority,
-				'types' => $this->getTicketTypeRepo()->getAll(),
+				'types' => $this->getTicketTypeRepo()->getAllCreatable(),
 			];
 
 			return $this->view('Kieran\Support:Ticket\Filters', 'kieran_support_filters', $viewParams);
