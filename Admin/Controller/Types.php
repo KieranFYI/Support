@@ -20,6 +20,7 @@ class Types extends \XF\Admin\Controller\AbstractController
 			'type' => $type,
 			'success' => $this->filter('success', 'bool'),
 			'fields' => $this->getTicketFieldRepo()->findFieldsForList()->fetch(),
+			'userGroups' => $this->em()->getRepository('XF:UserGroup')->getUserGroupTitlePairs(),
 			'allStatus' => $this->getStatusRepo()->getAll(),
 			'allPriorities' => Ticket::$Priority,
 		];
@@ -90,7 +91,12 @@ class Types extends \XF\Admin\Controller\AbstractController
                 'description' => 'str',	
                 'hide_title' => 'uint',	
                 'hide_message' => 'uint',
-                'require_priority' => 'uint',
+				'require_priority' => 'uint',
+				'groups_view' => 'array',
+				'groups_create' => 'array',
+				'groups_process' => 'array',
+				'groups_delete_soft' => 'array',
+				'groups_delete_hard' => 'array',
 			],
 			'fields' => 'array',
 			'status' => 'array'
@@ -98,8 +104,6 @@ class Types extends \XF\Admin\Controller\AbstractController
 		
 		$form->basicEntitySave($type, $input['type']);
 		$form->run();
-		
-		$type->checkAndCreatePermissions($type);
 
 
 		$form = $this->formAction();

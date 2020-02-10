@@ -29,7 +29,7 @@ class TicketType extends Entity
 			return false;
 		}
 
-		return $user->hasPermission('support', 'view_' . $this->type_id);
+		return count(array_intersect(array_merge($user->secondary_group_ids, [$user->user_group_id]), $this->groups_view));
 	}
 
 	public function canCreate($user=null)
@@ -43,7 +43,7 @@ class TicketType extends Entity
 			return false;
 		}
 	
-		return $user->hasPermission('support', 'create_' . $this->type_id);
+		return count(array_intersect(array_merge($user->secondary_group_ids, [$user->user_group_id]), $this->groups_create));
 	}
 
 	public function canProcess($user=null)
@@ -57,7 +57,7 @@ class TicketType extends Entity
 			return false;
 		}
 	
-		return $user->hasPermission('support', 'process_' . $this->type_id);
+		return count(array_intersect(array_merge($user->secondary_group_ids, [$user->user_group_id]), $this->groups_process));
 	}
 
 	public function canDelete($delete_type = null)
@@ -65,72 +65,21 @@ class TicketType extends Entity
 		if ($delete_type === null) {
 			return !$this->getRelationOrDefault('Tickets', false)->count();
 		} else {
-			$visitor = \XF::visitor();
+			$user = \XF::visitor();
 			$delete_type = strtolower($delete_type);
 
-			if (!$visitor->user_id)
+			if (!$user->user_id)
 			{
 				return false;
 			}
 			
 			if ($delete_type == 'soft') {
-				return $visitor->hasPermission('support', 'soft_delete_' . $this->type_id);
+				return count(array_intersect(array_merge($user->secondary_group_ids, [$user->user_group_id]), $this->groups_delete_soft));
 			} else if ($delete_type == 'hard') {
-				return $visitor->hasPermission('support', 'hard_delete_' . $this->type_id);
+				return count(array_intersect(array_merge($user->secondary_group_ids, [$user->user_group_id]), $this->groups_delete_hard));
 			} else {
 				return false;
 			}
-		}
-	}
-
-    public static $PermissionTypes = [
-        'create',
-        'process',
-        'view',
-        'soft_delete',
-        'hard_delete'
-    ];
-
-	public function _preDelete() {
-
-		foreach (self::$PermissionTypes as $perm) {
-			$perm = $this->em()->find('XF:Permission', [
-				'permission_group_id' => 'support',
-				'permission_id' => $perm . '_' . $this->type_id,
-				'interface_group_id' => 'supportTicket',
-            ]);
-            
-			if ($perm) {
-				$perm->delete();
-			}
-		}
-    }
-
-    public function checkAndCreatePermissions() {
-
-		foreach (self::$PermissionTypes as $key => $perm) {
-
-			$permCheck = $this->em()->find('XF:Permission', [
-				'permission_group_id' => 'support',
-				'permission_id' => $perm . '_' . $this->type_id,
-				'interface_group_id' => 'supportTicket',
-            ]);
-            
-			if (!$permCheck) {
-				$permission = $this->em()->create('XF:Permission');
-				$permission->permission_id = $perm . '_' . $this->type_id;
-				$permission->permission_group_id = 'support';
-				$permission->permission_type = 'flag';
-				$permission->interface_group_id = 'supportTicket';
-				$permission->depend_permission_id = '';
-				$permission->display_order = 100 + ($this->type_id * 10) + $key;
-                $permission->save();
-                
-                $title = $permission->getMasterPhrase();
-                $title->phrase_text = 'Can ' . str_replace('_', ' ', $perm) . ' ticket type ' . $this->name;
-                $title->save();
-            }
-            
 		}
 	}
 	
@@ -181,7 +130,22 @@ class TicketType extends Entity
             'enabled' => ['type' => self::UINT, 'default' => 0],
             'hide_title' => ['type' => self::UINT, 'default' => 0],
             'hide_message' => ['type' => self::UINT, 'default' => 0],
-            'require_priority' => ['type' => self::UINT, 'default' => 0],
+			'require_priority' => ['type' => self::UINT, 'default' => 0],
+			'groups_view' => ['type' => self::LIST_COMMA, 'default' => [],
+				'list' => ['type' => 'posint', 'unique' => true, 'sort' => SORT_NUMERIC]
+			],
+			'groups_create' => ['type' => self::LIST_COMMA, 'default' => [],
+				'list' => ['type' => 'posint', 'unique' => true, 'sort' => SORT_NUMERIC]
+			],
+			'groups_process' => ['type' => self::LIST_COMMA, 'default' => [],
+				'list' => ['type' => 'posint', 'unique' => true, 'sort' => SORT_NUMERIC]
+			],
+			'groups_delete_soft' => ['type' => self::LIST_COMMA, 'default' => [],
+				'list' => ['type' => 'posint', 'unique' => true, 'sort' => SORT_NUMERIC]
+			],
+			'groups_delete_hard' => ['type' => self::LIST_COMMA, 'default' => [],
+				'list' => ['type' => 'posint', 'unique' => true, 'sort' => SORT_NUMERIC]
+			]
         ];
         $structure->getters = [
 			'draft_reply' => true,

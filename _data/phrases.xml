@@ -49,6 +49,11 @@
   <phrase title="kieran_support_tickets_manage" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Manage]]></phrase>
   <phrase title="kieran_support_tickets_no_types" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[No ticket types available]]></phrase>
   <phrase title="kieran_support_title" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Help &amp; Support]]></phrase>
+  <phrase title="kieran_support_type_groups_create" version_id="1000270" version_string="1.0.2"><![CDATA[Create type]]></phrase>
+  <phrase title="kieran_support_type_groups_delete_hard" version_id="1000270" version_string="1.0.2"><![CDATA[Hard delete type]]></phrase>
+  <phrase title="kieran_support_type_groups_delete_soft" version_id="1000270" version_string="1.0.2"><![CDATA[Soft delete type]]></phrase>
+  <phrase title="kieran_support_type_groups_process" version_id="1000270" version_string="1.0.2"><![CDATA[Process type]]></phrase>
+  <phrase title="kieran_support_type_groups_view" version_id="1000270" version_string="1.0.2"><![CDATA[View type]]></phrase>
   <phrase title="kieran_support_unlock_comments" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Unlock comments]]></phrase>
   <phrase title="kieran_support_view_articles" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[View articles]]></phrase>
   <phrase title="kieran_support_view_ticket" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[View ticket]]></phrase>

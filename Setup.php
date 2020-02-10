@@ -2,7 +2,9 @@
 
 namespace Kieran\Support;
 
+use XF;
 use XF\Db\Schema\Create;
+use XF\Db\Schema\Alter;
 use Kieran\Support\Repository\Ticket;
 
 class Setup extends \XF\AddOn\AbstractSetup
@@ -78,7 +80,13 @@ class Setup extends \XF\AddOn\AbstractSetup
 
 			$table->addColumn('hide_title', 'int', 1)->setDefault(0);
             $table->addColumn('hide_message', 'int', 1)->setDefault(0);
-            $table->addColumn('require_priority', 'int', 1)->setDefault(0);
+			$table->addColumn('require_priority', 'int', 1)->setDefault(0);
+			
+			$table->addColumn('groups_view', 'varbinary', 255);
+			$table->addColumn('groups_create', 'varbinary', 255);
+			$table->addColumn('groups_process', 'varbinary', 255);
+			$table->addColumn('groups_delete_soft', 'varbinary', 255);
+			$table->addColumn('groups_delete_hard', 'varbinary', 255);
             
 			$table->addPrimaryKey('type_id');
 			$table->addKey(['type_id'], 'type_id');
@@ -218,6 +226,40 @@ class Setup extends \XF\AddOn\AbstractSetup
 	
 	public function upgrade(array $stepParams = [])
 	{
+
+		if (!$this->schemaManager()->columnExists('xf_kieran_support_ticket_type', 'groups_view')) {
+            $this->schemaManager()->alterTable('xf_kieran_support_ticket_type', function (Alter $table)
+			{
+				$table->addColumn('groups_view', 'varbinary', 255);
+				$table->addColumn('groups_create', 'varbinary', 255);
+				$table->addColumn('groups_process', 'varbinary', 255);
+				$table->addColumn('groups_delete_soft', 'varbinary', 255);
+				$table->addColumn('groups_delete_hard', 'varbinary', 255);
+			});
+		}
+		
+		$PermissionTypes = [
+			'create',
+			'process',
+			'view',
+			'soft_delete',
+			'hard_delete'
+		];
+
+		$types = XF::repository('Kieran\Support:TicketType')->getAll(false);
+		foreach ($types as $type) {
+			foreach ($PermissionTypes as $perm) {
+				$perm = XF::em()->find('XF:Permission', [
+					'permission_group_id' => 'support',
+					'permission_id' => $perm . '_' . $type->type_id,
+					'interface_group_id' => 'supportTicket',
+				]);
+				
+				if ($perm) {
+					$perm->delete();
+				}
+			}
+		}
 	}
 	
 	public function uninstallStep1(array $stepParams = [])

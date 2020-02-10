@@ -118,7 +118,7 @@
 <xf:else />
 	<div class="blockMessage">{{ phrase('no_items_have_been_created_yet') }}</div>
 </xf:if>]]></template>
-  <template type="admin" title="kieran_support_types_edit" version_id="1000032" version_string="1.0.0 Beta"><![CDATA[<xf:if is="$type.isInsert()">
+  <template type="admin" title="kieran_support_types_edit" version_id="1000270" version_string="1.0.2"><![CDATA[<xf:if is="$type.isInsert()">
 	<xf:title>{{ phrase('kieran_support_ticket_types_add') }}</xf:title>
 <xf:else />
 	<xf:title>{{ phrase('kieran_support_ticket_types_edit:') }} {$type.name}</xf:title>
@@ -159,6 +159,44 @@
 			<xf:checkboxrow label="{{ phrase('kieran_support_ticket_require_priority') }}">
 				<xf:option name="type[require_priority]" selected="$type.require_priority" value="1" />
 			</xf:checkboxrow>
+		</div>
+		<h3 class="block-formSectionHeader">
+			<span class="collapseTrigger collapseTrigger--block" data-xf-click="toggle" data-target="< :up:next">
+				<span class="block-formSectionHeader-aligner">{{ phrase('permissions') }}</span>
+			</span>
+		</h3>
+		<div class="block-body block-body--collapsible">
+			
+			<xf:checkboxrow name="groups_view" value="{$type.groups_view}"
+						listclass="listColumns"
+						label="{{ phrase('kieran_support_type_groups_view') }}">
+				<xf:options source="$userGroups" />
+			</xf:checkboxrow>
+			
+			<xf:checkboxrow name="groups_create" value="{$type.groups_create}"
+						listclass="listColumns"
+						label="{{ phrase('kieran_support_type_groups_create') }}">
+				<xf:options source="$userGroups" />
+			</xf:checkboxrow>
+			
+			<xf:checkboxrow name="groups_process" value="{$type.groups_process}"
+						listclass="listColumns"
+						label="{{ phrase('kieran_support_type_groups_process') }}">
+				<xf:options source="$userGroups" />
+			</xf:checkboxrow>
+			
+			<xf:checkboxrow name="groups_delete_soft" value="{$type.groups_delete_soft}"
+						listclass="listColumns"
+						label="{{ phrase('kieran_support_type_groups_delete_soft') }}">
+				<xf:options source="$userGroups" />
+			</xf:checkboxrow>
+			
+			<xf:checkboxrow name="groups_delete_hard" value="{$type.groups_delete_hard}"
+						listclass="listColumns"
+						label="{{ phrase('kieran_support_type_groups_delete_hard') }}">
+				<xf:options source="$userGroups" />
+			</xf:checkboxrow>
+			
 		</div>
 
 		<h3 class="block-formSectionHeader">

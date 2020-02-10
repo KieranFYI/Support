@@ -27,7 +27,7 @@ class TicketField extends AbstractField
 		self::setupDefaultStructure(
 			$structure,
 			'xf_kieran_support_ticket_field',
-			'PG\Suport:TicketField',
+			'Kieran\Support:TicketField',
 			['groups' => ['ticket']]
 		);
 
