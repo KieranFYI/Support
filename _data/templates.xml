@@ -28,7 +28,7 @@
 		</div>
 	</div>
 </xf:form>]]></template>
-  <template type="admin" title="kieran_support_statuses_edit" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:if is="$status.isInsert()">
+  <template type="admin" title="kieran_support_statuses_edit" version_id="1000273" version_string="1.0.2"><![CDATA[<xf:if is="$status.isInsert()">
 	<xf:title>{{ phrase('kieran_support_ticket_statuses_add') }}</xf:title>
 <xf:else />
 	<xf:title>{{ phrase('kieran_support_ticket_statuses_edit:') }} {$status.name}</xf:title>
@@ -70,6 +70,12 @@
 
 			<xf:textarearow name="status[message]" value="{$status.message}" autosize="true"
 				label="{{ phrase('message') }}" />
+			
+			<xf:checkboxrow name="status[groups]" value="{$status.groups}"
+						listclass="listColumns"
+						label="{{ phrase('permissions') }}">
+				<xf:options source="$userGroups" />
+			</xf:checkboxrow>
 		</div>
 
 		<xf:if is="!$status.undeletable">
@@ -118,7 +124,7 @@
 <xf:else />
 	<div class="blockMessage">{{ phrase('no_items_have_been_created_yet') }}</div>
 </xf:if>]]></template>
-  <template type="admin" title="kieran_support_types_edit" version_id="1000270" version_string="1.0.2"><![CDATA[<xf:if is="$type.isInsert()">
+  <template type="admin" title="kieran_support_types_edit" version_id="1000271" version_string="1.0.2"><![CDATA[<xf:if is="$type.isInsert()">
 	<xf:title>{{ phrase('kieran_support_ticket_types_add') }}</xf:title>
 <xf:else />
 	<xf:title>{{ phrase('kieran_support_ticket_types_edit:') }} {$type.name}</xf:title>
@@ -167,31 +173,31 @@
 		</h3>
 		<div class="block-body block-body--collapsible">
 			
-			<xf:checkboxrow name="groups_view" value="{$type.groups_view}"
+			<xf:checkboxrow name="type[groups_view]" value="{$type.groups_view}"
 						listclass="listColumns"
 						label="{{ phrase('kieran_support_type_groups_view') }}">
 				<xf:options source="$userGroups" />
 			</xf:checkboxrow>
 			
-			<xf:checkboxrow name="groups_create" value="{$type.groups_create}"
+			<xf:checkboxrow name="type[groups_create]" value="{$type.groups_create}"
 						listclass="listColumns"
 						label="{{ phrase('kieran_support_type_groups_create') }}">
 				<xf:options source="$userGroups" />
 			</xf:checkboxrow>
 			
-			<xf:checkboxrow name="groups_process" value="{$type.groups_process}"
+			<xf:checkboxrow name="type[groups_process]" value="{$type.groups_process}"
 						listclass="listColumns"
 						label="{{ phrase('kieran_support_type_groups_process') }}">
 				<xf:options source="$userGroups" />
 			</xf:checkboxrow>
 			
-			<xf:checkboxrow name="groups_delete_soft" value="{$type.groups_delete_soft}"
+			<xf:checkboxrow name="type[groups_delete_soft]" value="{$type.groups_delete_soft}"
 						listclass="listColumns"
 						label="{{ phrase('kieran_support_type_groups_delete_soft') }}">
 				<xf:options source="$userGroups" />
 			</xf:checkboxrow>
 			
-			<xf:checkboxrow name="groups_delete_hard" value="{$type.groups_delete_hard}"
+			<xf:checkboxrow name="type[groups_delete_hard]" value="{$type.groups_delete_hard}"
 						listclass="listColumns"
 						label="{{ phrase('kieran_support_type_groups_delete_hard') }}">
 				<xf:options source="$userGroups" />
@@ -1086,7 +1092,7 @@
 		<xf:submitrow submit="{{ phrase('update') }}" />
 	</div>
 </xf:form>]]></template>
-  <template type="public" title="kieran_support_ticket_status_start" version_id="1000000" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('kieran_support_ticket_change_status') }}</xf:title>
+  <template type="public" title="kieran_support_ticket_status_start" version_id="1000273" version_string="1.0.2"><![CDATA[<xf:title>{{ phrase('kieran_support_ticket_change_status') }}</xf:title>
 
 <xf:breadcrumb href="{{ link('support/tickets') }}">{{ phrase('kieran_support_tickets') }}</xf:breadcrumb>
 <xf:breadcrumb href="{{ link('support/tickets', $ticket) }}">{$ticket.ticket_title} #{$ticket.ticket_id}</xf:breadcrumb>
@@ -1100,7 +1106,7 @@
 		<div class="block-body">
 			<xf:selectrow name="status" label="{{ phrase('status') }}">
 				<xf:foreach loop="$ticket.TicketType.statuses" value="$status">
-					<xf:if is="$ticket.status_id != $status.status_id">
+					<xf:if is="$ticket.status_id != $status.status_id && $status.canUse()">
 						<xf:option value="{$status.status_id}" selected="{{ $status.status_id == 'open'}}">{{ $status.name }}</xf:option>
 					</xf:if>
 				</xf:foreach>
