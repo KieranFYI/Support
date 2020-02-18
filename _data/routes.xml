@@ -3,10 +3,11 @@
   <route route_type="admin" route_prefix="support" controller="Kieran\Support:Support" context="support"/>
   <route route_type="admin" route_prefix="support" sub_name="fields" format="fields/:str&lt;field_id&gt;" controller="Kieran\Support:TicketField" context="support"/>
   <route route_type="admin" route_prefix="support" sub_name="statuses" format="statuses/:str&lt;status_id&gt;" controller="Kieran\Support:Statuses" context="support"/>
-  <route route_type="admin" route_prefix="support" sub_name="types" format="types/:int&lt;type_id&gt;" controller="Kieran\Support:Types" context="support"/>
+  <route route_type="admin" route_prefix="support" sub_name="types" format="types/:str&lt;type_id&gt;" controller="Kieran\Support:Types" context="support"/>
   <route route_type="public" route_prefix="support" format=":str&lt;topic_slug&gt;/:str&lt;article_slug&gt;/" controller="Kieran\Support:Support" context="support"/>
   <route route_type="public" route_prefix="support" sub_name="comments" format="comments/:int&lt;ticket_comment_id&gt;" controller="Kieran\Support:Comment" context="support"/>
   <route route_type="public" route_prefix="support" sub_name="manage/article" format="manage/article/:int&lt;article_id&gt;" controller="Kieran\Support:Article" context="support"/>
   <route route_type="public" route_prefix="support" sub_name="manage/topic" format="manage/topic/:int&lt;topic_id&gt;" controller="Kieran\Support:Topic" context="support"/>
   <route route_type="public" route_prefix="support" sub_name="tickets" format="tickets/:int&lt;ticket_id&gt;" controller="Kieran\Support:Ticket" context="support"/>
+  <route route_type="public" route_prefix="support" sub_name="ticketss" format="tickets/:str&lt;ticket_id&gt;" controller="Kieran\Support:Ticket" context="support"/>
 </routes>

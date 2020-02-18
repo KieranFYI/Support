@@ -57,7 +57,7 @@ class Setup extends \XF\AddOn\AbstractSetup
 		{
 			$table->addColumn('ticket_id', 'int')->autoIncrement();
 			$table->addColumn('user_id', 'int');
-			$table->addColumn('type_id', 'int', 11);
+			$table->addColumn('type_id', 'varbinary', 25);
 			$table->addColumn('ticket_title', 'varchar', 150);
 			$table->addColumn('status_id', 'varchar', 100);
 			$table->addColumn('state', 'enum', ['visible', 'locked', 'hidden', 'awaiting', 'closed', 'deleted'])->setDefault('visible');
@@ -73,7 +73,7 @@ class Setup extends \XF\AddOn\AbstractSetup
 		
 		$this->schemaManager()->createTable('xf_kieran_support_ticket_type', function(Create $table)
 		{
-			$table->addColumn('type_id', 'int')->autoIncrement();
+			$table->addColumn('type_id', 'varbinary', 25);
 			$table->addColumn('name', 'varchar', 150);
 			$table->addColumn('description', 'text');
 			$table->addColumn('enabled', 'int', 1)->setDefault(0);
@@ -121,7 +121,7 @@ class Setup extends \XF\AddOn\AbstractSetup
 		$this->schemaManager()->createTable('xf_kieran_support_ticket_type_status', function(Create $table)
 		{
 			$table->addColumn('status_id', 'varbinary', 25);
-			$table->addColumn('type_id', 'int');
+			$table->addColumn('type_id', 'varbinary', 25);
 			$table->addPrimaryKey(['status_id', 'type_id']);
 			$table->addKey(['status_id', 'type_id'], 'status_id_type_id');
 		});
@@ -267,6 +267,57 @@ class Setup extends \XF\AddOn\AbstractSetup
 					$perm->delete();
 				}
 			}
+		}
+
+		$definition = [];
+		if ($this->schemaManager()->columnExists('xf_kieran_support_ticket', 'type_id', $definition) && $definition['Type'] === 'int(10) unsigned') {
+			$this->schemaManager()->alterTable('xf_kieran_support_ticket_type', function (Alter $table)
+			{
+				$table->addColumn('type_id_v', 'varbinary', 255)->after('type_id');
+			});
+
+			XF::db()->query('UPDATE `xf_kieran_support_ticket_type` SET `type_id_v`=lcase(REPLACE(`name`, " ", "_"))');
+			
+			$this->schemaManager()->alterTable('xf_kieran_support_ticket', function (Alter $table)
+			{
+				$table->addColumn('type_id_v', 'varbinary', 255)->after('type_id');
+			});
+
+			$this->schemaManager()->alterTable('xf_kieran_support_ticket_type_status', function (Alter $table)
+			{
+				$table->addColumn('type_id_v', 'varbinary', 255)->after('type_id');
+			});
+
+			XF::db()->query('UPDATE `xf_kieran_support_ticket` `kst` SET `kst`.`type_id_v` = (SELECT `type_id_v` FROM `xf_kieran_support_ticket_type` `stt` WHERE `kst`.`type_id` = `stt`.`type_id`)');
+			
+			XF::db()->query('DELETE FROM `xf_kieran_support_ticket_type_status` WHERE `type_id` NOT IN (SELECT `type_id` FROM `xf_kieran_support_ticket_type`)');
+			XF::db()->query('UPDATE `xf_kieran_support_ticket_type_status` `stts` SET `stts`.`type_id_v` = (SELECT `type_id_v` FROM `xf_kieran_support_ticket_type` `stt` WHERE `stts`.`type_id` = `stt`.`type_id`)');
+			
+			XF::db()->query('UPDATE `xf_kieran_support_field` `sf` SET `sf`.`content_id` = (SELECT `type_id_v` FROM `xf_kieran_support_ticket_type` `stt` WHERE `stt`.`type_id` = `sf`.`content_id`)');
+			
+			$this->schemaManager()->alterTable('xf_kieran_support_ticket', function (Alter $table)
+			{
+				$table->dropColumns(['type_id']);
+				$table->renameColumn('type_id_v', 'type_id');
+			});
+			
+			$this->schemaManager()->alterTable('xf_kieran_support_ticket_type', function (Alter $table)
+			{
+				$table->dropColumns(['type_id']);
+				$table->renameColumn('type_id_v', 'type_id');
+			});
+		
+			$this->schemaManager()->alterTable('xf_kieran_support_ticket_type_status', function (Alter $table)
+			{
+				$table->dropPrimaryKey();
+				$table->dropIndexes(['status_id_type_id']);
+
+				$table->dropColumns(['type_id']);
+				$table->renameColumn('type_id_v', 'type_id');
+
+				$table->addPrimaryKey(['status_id', 'type_id']);
+				$table->addKey(['status_id', 'type_id'], 'status_id_type_id');
+			});
 		}
 	}
 	

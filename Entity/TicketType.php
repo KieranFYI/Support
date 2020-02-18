@@ -124,7 +124,7 @@ class TicketType extends Entity
         $structure->shortName = 'Kieran\Support:TicketType';
         $structure->primaryKey = 'type_id';
         $structure->columns = [
-			'type_id' => ['type' => self::UINT, 'autoIncrement' => true, 'nullable' => false, 'changeLog' => false],
+			'type_id' => ['type' => self::STR, 'required' => true, 'match' => 'alphanumeric', 'nullable' => false],
 			'name' => ['type' => self::STR, 'required' => true],
             'description' => ['type' => self::STR, 'default' => ''],
             'enabled' => ['type' => self::UINT, 'default' => 0],

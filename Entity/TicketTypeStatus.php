@@ -15,7 +15,7 @@ class TicketTypeStatus extends Entity
         $structure->primaryKey = ['status_id', 'type_id'];
         $structure->columns = [
 			'status_id' => ['type' => self::STR, 'required' => true, 'nullable' => false, 'maxLength' => 25],
-			'type_id' => ['type' => self::UINT, 'required' => true, 'nullable' => false],
+			'type_id' => ['type' => self::STR, 'required' => true, 'nullable' => false],
         ];
         
         return $structure;

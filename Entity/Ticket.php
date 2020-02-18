@@ -146,7 +146,7 @@ class Ticket extends Entity
 		$structure->columns = [
 			'ticket_id' => ['type' => self::UINT, 'autoIncrement' => true, 'nullable' => false, 'changeLog' => false],
 			'user_id' =>  ['type' => self::UINT, 'required' => true],
-			'type_id' => ['type' => self::UINT, 'default' => 'other'],
+			'type_id' => ['type' => self::STR, 'required' => true, 'nullable' => false],
 			'ticket_title' => ['type' => self::STR, 'default' => ''],
 			'status_id' =>  ['type' => self::STR, 'default' => 'new'],
 			'state' =>  ['type' => self::STR, 'default' => 'visible',

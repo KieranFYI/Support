@@ -40,6 +40,7 @@
   <phrase title="kieran_support_ticket_statuses_add" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Add status]]></phrase>
   <phrase title="kieran_support_ticket_statuses_edit" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Edit status]]></phrase>
   <phrase title="kieran_support_ticket_type" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Ticket Type]]></phrase>
+  <phrase title="kieran_support_ticket_type_id" version_id="1000279" version_string="1.0.2"><![CDATA[Type ID]]></phrase>
   <phrase title="kieran_support_ticket_types" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Ticket Types]]></phrase>
   <phrase title="kieran_support_ticket_types_add" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Add type]]></phrase>
   <phrase title="kieran_support_ticket_types_edit" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Edit type]]></phrase>

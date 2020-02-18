@@ -14,7 +14,7 @@ class TicketTypeField extends Entity
         $structure->shortName = 'Kieran\Support:TicketTypeField';
         $structure->primaryKey = ['type_id', 'field_id'];
         $structure->columns = [
-			'type_id' => ['type' => self::UINT, 'required' => true, 'nullable' => false,],
+			'type_id' => ['type' => self::STR, 'required' => true, 'nullable' => false,],
 			'field_id' => ['type' => self::STR, 'required' => true, 'nullable' => false, 'maxLength' => 25],
         ];
 		$structure->relations = [

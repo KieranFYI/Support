@@ -214,9 +214,8 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 		{
 			return $this->noPermission();
 		}
-		
 
-		$id = $this->request->filter('type', 'int');
+		$id = $this->request->filter('type', 'str');
 
 		if ($params->ticket_id) {
 			$id = $params->ticket_id;

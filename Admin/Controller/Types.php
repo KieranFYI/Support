@@ -86,6 +86,7 @@ class Types extends \XF\Admin\Controller\AbstractController
 
 		$input = $this->filter([
 			'type' => [
+				'type_id' => 'str',
 				'enabled' => 'uint',
 				'name' => 'str',
                 'description' => 'str',	
@@ -101,6 +102,11 @@ class Types extends \XF\Admin\Controller\AbstractController
 			'fields' => 'array',
 			'status' => 'array'
 		]);
+		
+
+		if (!$type->isInsert()) {
+			unset($input['type']['type_id']);
+		}
 		
 		$form->basicEntitySave($type, $input['type']);
 		$form->run();
