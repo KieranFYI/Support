@@ -129,34 +129,4 @@ class Ticket extends Repository
 
 		return $finder;
 	}
-
-    public function findUsersWithPermission($permission_group_id, $permission_id, $permission_value)
-    {
-        $users = $this->db()->fetchAll("SELECT
-			  xf_user.user_id, xf_user.username, xf_permission_combination.cache_value
-			FROM
-			  xf_user
-			INNER JOIN
-			  xf_permission_combination ON xf_user.permission_combination_id = xf_permission_combination.permission_combination_id
-			ORDER BY
-			  xf_user.username ASC;");
-
-        foreach ($users AS $id => $user)
-        {
-            $cache_value = json_decode($user['cache_value'], true);
-            if (isset($cache_value[$permission_group_id][$permission_id]))
-            {
-                if ($cache_value[$permission_group_id][$permission_id] != $permission_value)
-                {
-                    unset($users[$id]);
-                }
-                else
-                {
-                    unset($users[$id]['cache_value']);
-                }
-            }
-        }
-
-        return $users;
-    }
 }

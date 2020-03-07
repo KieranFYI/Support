@@ -116,7 +116,7 @@ class Ticket extends Entity
 			$ticket_type = $this->TicketType;
 		}
 
-		return $this->getTicketRepo()->findUsersWithPermission('support', 'process_' . $ticket_type->type_id, true);
+		return $ticket_type->getUsersWhoCanHandle();
 	}
 
 	public function getNewComment()

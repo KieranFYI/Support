@@ -170,5 +170,19 @@ class TicketType extends Entity
 		];
         
         return $structure;
-    }
+	}
+	
+	public function getUsersWhoCanHandle()
+	{
+		$finder = $this->finder('XF:User');
+
+		$sql = [];
+        foreach ($this->groups_process as $value) {
+            $sql[] = 'find_in_set(' . intval($value) . ', CONCAT(secondary_group_ids, ",", user_group_id))';
+        }
+
+        $finder->whereSql(implode(' AND ', $sql));
+
+		return $finder->fetch();
+	}
 }

@@ -85,10 +85,9 @@ class Ticket extends \XF\Pub\Controller\AbstractController
 
 		$filters = $this->getFilterInput();
 		$filters['assigned_user_id'] = \XF::visitor()->user_id;
-
 		$page = $this->filterPage();
 		$perPage = 25;
-		$finder = $this->getTicketRepo()->findTickets($filters, $page, $perPage);
+		$finder = $this->getTicketRepo()->findTickets(array_column($this->getTicketTypeRepo()->getAllCreatable(), 'type_id'), $filters, $page, $perPage);
 		$total = $finder->total();
 
 		$this->assertValidPage($page, $perPage, $total, 'support/tickets/manage');
