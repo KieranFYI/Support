@@ -78,6 +78,18 @@ class TicketType extends Repository
 		return $creatable;
 	}
 
+	public function getAllViewable() {
+		$all = $this->getAll();
+		$creatable = [];
+		foreach ($all as $type) {
+			if ($type->canView()) {
+				$creatable[] = $type;
+			}
+		}
+
+		return $creatable;
+	}
+
 	public function setupBaseType()
 	{
 		return $this->em->create('Kieran\Support:TicketType');

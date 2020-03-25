@@ -181,7 +181,7 @@ class TicketType extends Entity
             $sql[] = 'find_in_set(' . intval($value) . ', CONCAT(secondary_group_ids, ",", user_group_id))';
         }
 
-        $finder->whereSql(implode(' AND ', $sql));
+        $finder->whereSql(implode(' OR ', $sql));
 
 		return $finder->fetch();
 	}
